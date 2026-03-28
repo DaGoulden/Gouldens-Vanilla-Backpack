@@ -2,6 +2,7 @@ package net.goulden.gouldensvanillabackpack.common.events;
 
 import net.goulden.gouldensvanillabackpack.GouldensVanillaBackpack;
 import net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlockEntity;
+import net.goulden.gouldensvanillabackpack.networking.BackpackEquipPayload;
 import net.goulden.gouldensvanillabackpack.registry.BPBlocks;
 import net.goulden.gouldensvanillabackpack.registry.BPDataAttachments;
 import net.goulden.gouldensvanillabackpack.registry.BPItems;
@@ -43,38 +44,6 @@ import static net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlock.WA
 @EventBusSubscriber(modid = GouldensVanillaBackpack.MODID)
 public class BackpackPickupEvents {
 
-    /*@SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onRightClickBlock (PlayerInteractEvent.RightClickBlock event) {
-        Player player = event.getEntity();
-
-        if (event.getHand() != InteractionHand.MAIN_HAND) return;
-        if (!player.getItemInHand(event.getHand()).isEmpty()) return;
-        if (!player.isCrouching()) return;
-
-        Level level = player.level();
-        BlockPos pos = event.getHitVec().getBlockPos();
-        BlockState state = level.getBlockState(pos);
-        //ItemStack equippedItem = player.getData(BPDataAttachments.EQUIPPED_BACKPACK);
-
-        // PICKUP BACKPACK
-        if (state.is(BPBlocks.BACKPACK) && level.getBlockEntity(pos) instanceof BackpackBlockEntity backpackBlockEntity &&
-        //equippedItem.isEmpty()
-        ) {
-            if (level.isClientSide) {
-                player.playSound(BPSounds.BACKPACK_EQUIP.value(), 1.0F, 1.0F);
-                player.swing(InteractionHand.MAIN_HAND);
-            } else {
-                ItemStack backpackItem = new ItemStack(BPBlocks.BACKPACK);
-                player.setData(BPDataAttachments.EQUIPPED_BACKPACK, backpackItem);
-                PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new BackpackEquipPayload(player.getId(), backpackItem));
-                level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
-            }
-            addParticles(level, pos);
-
-            event.setCanceled(true);
-        }
-    }*/
-
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onRightClickBlock (PlayerInteractEvent.RightClickBlock event) {
         Level level = event.getLevel();
@@ -85,24 +54,25 @@ public class BackpackPickupEvents {
         BlockEntity blockEntity = level.getBlockEntity(pos);
 
         ItemStack heldItem = event.getItemStack();
-        ItemStack chestSlotItem = player.getItemBySlot(EquipmentSlot.CHEST);
+        ItemStack chestSlotItem = player.getData(BPDataAttachments.EQUIPPED_BACKPACK);
 
         boolean hasBackpack = chestSlotItem.is(BPItems.BACKPACK);
-        boolean hasChestPlate = !chestSlotItem.isEmpty();
         boolean isAbove = (pos.above().getY() > player.getEyeY());
         boolean isUnobstructed = level.isUnobstructed(BPBlocks.BACKPACK.get().defaultBlockState(), pos.above(),
                 CollisionContext.of(player)) && level.getBlockState(pos.above()).canBeReplaced();
 
         //PICKUP
-        if (player.isShiftKeyDown() && !hasChestPlate && block == BPBlocks.BACKPACK.get() && blockEntity != null) {
+        if (player.isShiftKeyDown() && !hasBackpack && block == BPBlocks.BACKPACK.get() && blockEntity != null) {
 
             player.swing(InteractionHand.MAIN_HAND);
             ItemStack itemstack = new ItemStack(BPBlocks.BACKPACK);
             itemstack.applyComponents(blockEntity.collectComponents());
-            player.setItemSlot(EquipmentSlot.CHEST, itemstack);
             addParticles(level, pos);
 
             if (!level.isClientSide) {
+                player.setData(BPDataAttachments.EQUIPPED_BACKPACK, itemstack);
+                PacketDistributor.sendToPlayersTrackingEntityAndSelf(player,
+                        new BackpackEquipPayload(player.getId(), itemstack));
                 level.removeBlockEntity(pos);
                 level.removeBlock(pos, false);
             }
@@ -130,7 +100,9 @@ public class BackpackPickupEvents {
                 level.setBlockAndUpdate(pos.above(), state);
                 level.setBlockEntity(blockEntity);
 
-                chestSlotItem.shrink(1);
+                player.setData(BPDataAttachments.EQUIPPED_BACKPACK, ItemStack.EMPTY);
+                PacketDistributor.sendToPlayersTrackingEntityAndSelf(player,
+                        new BackpackEquipPayload(player.getId(), ItemStack.EMPTY));
                 level.playSound(null, pos.above(), BPSounds.BACKPACK_PLACE.value(), SoundSource.BLOCKS);
             }
             event.setCancellationResult(InteractionResult.FAIL);
@@ -139,7 +111,7 @@ public class BackpackPickupEvents {
     }
 
     //ARMOR SWAPPING
-    @SubscribeEvent
+    /*@SubscribeEvent
     public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
         Item item = event.getItemStack().getItem();
         EquipmentSlot slot = null;
@@ -151,7 +123,7 @@ public class BackpackPickupEvents {
             event.setCancellationResult(InteractionResult.FAIL);
             event.setCanceled(true);
         }
-    }
+    }*/
 
     //ITEM PICKUP
     @SubscribeEvent

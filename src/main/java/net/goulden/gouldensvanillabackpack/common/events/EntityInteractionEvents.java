@@ -2,6 +2,7 @@ package net.goulden.gouldensvanillabackpack.common.events;
 
 import net.goulden.gouldensvanillabackpack.GouldensVanillaBackpack;
 import net.goulden.gouldensvanillabackpack.common.items.BackpackItemContainer;
+import net.goulden.gouldensvanillabackpack.registry.BPDataAttachments;
 import net.goulden.gouldensvanillabackpack.registry.BPItems;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -27,7 +28,7 @@ public class EntityInteractionEvents{
     public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
         Player player = event.getEntity();
         LivingEntity target = event.getTarget() instanceof LivingEntity ? (LivingEntity) event.getTarget() : null;
-        ItemStack item = target != null ? target.getItemBySlot(EquipmentSlot.CHEST) : null;
+        ItemStack item = target != null ? target.getData(BPDataAttachments.EQUIPPED_BACKPACK) : null;
 
         if (target != null && item.is(BPItems.BACKPACK) && isBehind(player, target)) {
             BackpackItemContainer container = new BackpackItemContainer(target, player);

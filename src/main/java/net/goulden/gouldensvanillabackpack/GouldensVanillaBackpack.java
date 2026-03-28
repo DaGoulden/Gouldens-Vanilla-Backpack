@@ -1,5 +1,6 @@
 package net.goulden.gouldensvanillabackpack;
 
+import net.goulden.gouldensvanillabackpack.networking.BackpackEquipPayload;
 import net.goulden.gouldensvanillabackpack.networking.BackpackOpenPayload;
 import net.goulden.gouldensvanillabackpack.networking.BackpackPayloadHandler;
 import net.goulden.gouldensvanillabackpack.registry.*;
@@ -36,6 +37,11 @@ public class GouldensVanillaBackpack {
     public static void register(final RegisterPayloadHandlersEvent event) {
         // Sets the current network version
         final PayloadRegistrar registrar = event.registrar("1");
+        registrar.playToClient(
+                BackpackEquipPayload.TYPE,
+                BackpackEquipPayload.STREAM_CODEC,
+                BackpackPayloadHandler::HandleEquip
+        );
         registrar.playToClient(
                 BackpackOpenPayload.TYPE,
                 BackpackOpenPayload.STREAM_CODEC,

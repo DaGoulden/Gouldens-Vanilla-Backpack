@@ -3,6 +3,7 @@ package net.goulden.gouldensvanillabackpack.client.rendering;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.goulden.gouldensvanillabackpack.GouldensVanillaBackpack;
+import net.goulden.gouldensvanillabackpack.registry.BPDataAttachments;
 import net.goulden.gouldensvanillabackpack.registry.BPItems;
 import net.goulden.gouldensvanillabackpack.registry.BPLayers;
 import net.minecraft.client.model.HumanoidModel;
@@ -47,7 +48,7 @@ public class BackpackLayer<T extends LivingEntity, M extends HumanoidModel<T>> e
     }
 
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T livingEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float headYaw, float headPitch) {
-        ItemStack itemStack = livingEntity.getItemBySlot(EquipmentSlot.CHEST);
+        ItemStack itemStack = livingEntity.getData(BPDataAttachments.EQUIPPED_BACKPACK);
 
         if (shouldRender(itemStack, livingEntity)) {
             //VANITY STUFF
