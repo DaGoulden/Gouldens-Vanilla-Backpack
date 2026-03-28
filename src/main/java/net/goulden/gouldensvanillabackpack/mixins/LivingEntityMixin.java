@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static net.goulden.gouldensvanillabackpack.registry.BPDataAttatchments.OPEN_COUNT;
-import static net.goulden.gouldensvanillabackpack.registry.BPDataAttatchments.OPEN_TICKS;
+import static net.goulden.gouldensvanillabackpack.registry.BPDataAttachments.OPEN_COUNT;
+import static net.goulden.gouldensvanillabackpack.registry.BPDataAttachments.OPEN_TICKS;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements BackpackWearer {

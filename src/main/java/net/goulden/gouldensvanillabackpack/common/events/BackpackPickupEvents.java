@@ -3,6 +3,7 @@ package net.goulden.gouldensvanillabackpack.common.events;
 import net.goulden.gouldensvanillabackpack.GouldensVanillaBackpack;
 import net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlockEntity;
 import net.goulden.gouldensvanillabackpack.registry.BPBlocks;
+import net.goulden.gouldensvanillabackpack.registry.BPDataAttachments;
 import net.goulden.gouldensvanillabackpack.registry.BPItems;
 import net.goulden.gouldensvanillabackpack.registry.BPSounds;
 import net.minecraft.core.BlockPos;
@@ -19,6 +20,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
@@ -30,6 +32,7 @@ import net.minecraft.world.InteractionResult;
 import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.Objects;
 
@@ -39,6 +42,38 @@ import static net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlock.WA
 @SuppressWarnings("unused")
 @EventBusSubscriber(modid = GouldensVanillaBackpack.MODID)
 public class BackpackPickupEvents {
+
+    /*@SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onRightClickBlock (PlayerInteractEvent.RightClickBlock event) {
+        Player player = event.getEntity();
+
+        if (event.getHand() != InteractionHand.MAIN_HAND) return;
+        if (!player.getItemInHand(event.getHand()).isEmpty()) return;
+        if (!player.isCrouching()) return;
+
+        Level level = player.level();
+        BlockPos pos = event.getHitVec().getBlockPos();
+        BlockState state = level.getBlockState(pos);
+        //ItemStack equippedItem = player.getData(BPDataAttachments.EQUIPPED_BACKPACK);
+
+        // PICKUP BACKPACK
+        if (state.is(BPBlocks.BACKPACK) && level.getBlockEntity(pos) instanceof BackpackBlockEntity backpackBlockEntity &&
+        //equippedItem.isEmpty()
+        ) {
+            if (level.isClientSide) {
+                player.playSound(BPSounds.BACKPACK_EQUIP.value(), 1.0F, 1.0F);
+                player.swing(InteractionHand.MAIN_HAND);
+            } else {
+                ItemStack backpackItem = new ItemStack(BPBlocks.BACKPACK);
+                player.setData(BPDataAttachments.EQUIPPED_BACKPACK, backpackItem);
+                PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new BackpackEquipPayload(player.getId(), backpackItem));
+                level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+            }
+            addParticles(level, pos);
+
+            event.setCanceled(true);
+        }
+    }*/
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onRightClickBlock (PlayerInteractEvent.RightClickBlock event) {

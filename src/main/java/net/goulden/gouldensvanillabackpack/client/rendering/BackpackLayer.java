@@ -24,8 +24,8 @@ import net.minecraft.world.item.component.DyedItemColor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-import static net.goulden.gouldensvanillabackpack.registry.BPDataAttatchments.OPEN_COUNT;
-import static net.goulden.gouldensvanillabackpack.registry.BPDataAttatchments.OPEN_TICKS;
+import static net.goulden.gouldensvanillabackpack.registry.BPDataAttachments.OPEN_COUNT;
+import static net.goulden.gouldensvanillabackpack.registry.BPDataAttachments.OPEN_TICKS;
 
 @OnlyIn(Dist.CLIENT)
 public class BackpackLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends RenderLayer<T, M>{
@@ -49,10 +49,6 @@ public class BackpackLayer<T extends LivingEntity, M extends HumanoidModel<T>> e
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T livingEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float headYaw, float headPitch) {
         ItemStack itemStack = livingEntity.getItemBySlot(EquipmentSlot.CHEST);
 
-
-
-
-
         if (shouldRender(itemStack, livingEntity)) {
             //VANITY STUFF
             /*if (ModList.get().isLoaded("vanity")) {
@@ -73,7 +69,7 @@ public class BackpackLayer<T extends LivingEntity, M extends HumanoidModel<T>> e
             }*/
             this.model = backpackModel;
 
-
+            //FIGURA STUFF
             /*if (ModList.get().isLoaded("figura")) {
                 figuraCompatStuff(poseStack, buffer, packedLight, livingEntity, partialTicks, itemStack, this);
             } else {
@@ -84,6 +80,7 @@ public class BackpackLayer<T extends LivingEntity, M extends HumanoidModel<T>> e
 
     }
 
+    //FIGURA STUFF
     /*private void figuraCompatStuff(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T livingEntity, float partialTicks, ItemStack itemStack, BackpackLayer backpackLayer) {
         Avatar avatar = AvatarManager.getAvatar(livingEntity);
         if (avatar != null) {

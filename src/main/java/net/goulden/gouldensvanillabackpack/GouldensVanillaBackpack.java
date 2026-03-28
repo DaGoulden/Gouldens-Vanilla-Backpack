@@ -3,7 +3,6 @@ package net.goulden.gouldensvanillabackpack;
 import net.goulden.gouldensvanillabackpack.networking.BackpackOpenPayload;
 import net.goulden.gouldensvanillabackpack.networking.BackpackPayloadHandler;
 import net.goulden.gouldensvanillabackpack.registry.*;
-import net.goulden.gouldensvanillabackpack.registry.*;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
@@ -15,7 +14,6 @@ import com.mojang.logging.LogUtils;
 
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 
@@ -27,7 +25,7 @@ public class GouldensVanillaBackpack {
     public GouldensVanillaBackpack(IEventBus modEventBus) {
         modEventBus.register(GouldensVanillaBackpack.class);
 
-        BPDataAttatchments.ATTACHMENT_TYPES.register(modEventBus);
+        BPDataAttachments.ATTACHMENT_TYPES.register(modEventBus);
         BPBlocks.BLOCKS.register(modEventBus);
         BPItems.ITEMS.register(modEventBus);
         BPBlockEntities.BLOCK_ENTITY_TYPES.register(modEventBus);

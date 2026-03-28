@@ -8,7 +8,7 @@ import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.function.Supplier;
 
-public class BPDataAttatchments {
+public class BPDataAttachments {
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, GouldensVanillaBackpack.MODID);
 
     public static final Supplier<AttachmentType<Integer>> OPEN_COUNT = ATTACHMENT_TYPES.register(
