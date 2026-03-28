@@ -1,4 +1,4 @@
-package net.goulden.gouldensvanillabackpack.mixins;
+/*package net.goulden.gouldensvanillabackpack.mixins;
 
 import net.goulden.gouldensvanillabackpack.BackpackWearer;
 import net.minecraft.world.entity.Entity;
@@ -34,3 +34,4 @@ public abstract class LivingEntityMixin extends Entity implements BackpackWearer
         this.setData(OPEN_COUNT, getData(OPEN_COUNT) - 1);
     }
 }
+*/

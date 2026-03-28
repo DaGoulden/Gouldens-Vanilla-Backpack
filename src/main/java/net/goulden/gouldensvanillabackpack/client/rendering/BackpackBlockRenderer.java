@@ -7,9 +7,6 @@ import net.goulden.gouldensvanillabackpack.GouldensVanillaBackpack;
 import net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlock;
 import net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlockEntity;
 import net.goulden.gouldensvanillabackpack.registry.BPLayers;
-import net.irisshaders.iris.shaderpack.materialmap.NamespacedId;
-import net.irisshaders.iris.shaderpack.materialmap.WorldRenderingSettings;
-import net.irisshaders.iris.uniforms.CapturedRenderingState;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -21,7 +18,6 @@ import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.fml.ModList;
 
 @OnlyIn(Dist.CLIENT)
 public class BackpackBlockRenderer implements BlockEntityRenderer<BackpackBlockEntity> {
@@ -127,20 +123,20 @@ public class BackpackBlockRenderer implements BlockEntityRenderer<BackpackBlockE
         }
         ResourceLocation location = OVERLAY_TEXTURE;
 
-        if (ModList.get().isLoaded("iris")) {
+        /*if (ModList.get().isLoaded("iris")) {
             irisCompatStuff(location);
-        }
+        }*/
 
         VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityCutoutNoCull(OVERLAY_TEXTURE));
         this.base.render(poseStack, vertexConsumer, packedLight, packedOverlay, FastColor.ARGB32.opaque(i));
         //poseStack.popPose();
     }
 
-    private void irisCompatStuff(ResourceLocation location) {
+    /*private void irisCompatStuff(ResourceLocation location) {
         if (WorldRenderingSettings.INSTANCE.getItemIds() != null) {
             CapturedRenderingState.INSTANCE.setCurrentRenderedItem(WorldRenderingSettings.INSTANCE.getItemIds().applyAsInt(new NamespacedId(location.getNamespace(), location.getPath())));
         }
-    }
+    }*/
 
 
 }

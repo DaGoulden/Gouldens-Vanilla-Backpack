@@ -2,7 +2,6 @@ package net.goulden.gouldensvanillabackpack.client.rendering;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Axis;
 import net.goulden.gouldensvanillabackpack.GouldensVanillaBackpack;
 import net.goulden.gouldensvanillabackpack.registry.BPItems;
 import net.goulden.gouldensvanillabackpack.registry.BPLayers;
@@ -24,11 +23,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.fml.ModList;
-import org.figuramc.figura.avatar.Avatar;
-import org.figuramc.figura.avatar.AvatarManager;
-import org.figuramc.figura.model.ParentType;
-import tech.thatgravyboat.vanity.common.item.DesignHelper;
 
 import static net.goulden.gouldensvanillabackpack.registry.BPDataAttatchments.OPEN_COUNT;
 import static net.goulden.gouldensvanillabackpack.registry.BPDataAttatchments.OPEN_TICKS;
@@ -61,7 +55,7 @@ public class BackpackLayer<T extends LivingEntity, M extends HumanoidModel<T>> e
 
         if (shouldRender(itemStack, livingEntity)) {
             //VANITY STUFF
-            if (ModList.get().isLoaded("vanity")) {
+            /*if (ModList.get().isLoaded("vanity")) {
                 ResourceLocation design = DesignHelper.getStyle(itemStack) != null ? DesignHelper.getStyle(itemStack).getFirst() : null;
                 //GouldensVanillaBackpack.LOGGER.debug(String.valueOf(design));
                 if (design == null) {
@@ -70,25 +64,27 @@ public class BackpackLayer<T extends LivingEntity, M extends HumanoidModel<T>> e
                     String path = design.toString();
                     GouldensVanillaBackpack.LOGGER.debug(path);
                     switch (path) {
-                        case "backpacks:test" -> this.model = otherBackpackModel;
+                        case "gouldensvanillabackpack:test" -> this.model = otherBackpackModel;
                         default -> this.model = backpackModel;
                     }
                 }
             } else {
                 this.model = backpackModel;
-            }
+            }*/
+            this.model = backpackModel;
 
 
-            if (ModList.get().isLoaded("figura")) {
+            /*if (ModList.get().isLoaded("figura")) {
                 figuraCompatStuff(poseStack, buffer, packedLight, livingEntity, partialTicks, itemStack, this);
             } else {
                 renderBaseLayer(poseStack, buffer, packedLight, livingEntity, partialTicks, itemStack, true);
-            }
+            }*/
+            renderBaseLayer(poseStack, buffer, packedLight, livingEntity, partialTicks, itemStack, true);
         }
 
     }
 
-    private void figuraCompatStuff(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T livingEntity, float partialTicks, ItemStack itemStack, BackpackLayer backpackLayer) {
+    /*private void figuraCompatStuff(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T livingEntity, float partialTicks, ItemStack itemStack, BackpackLayer backpackLayer) {
         Avatar avatar = AvatarManager.getAvatar(livingEntity);
         if (avatar != null) {
             boolean shouldRender = (avatar.luaRuntime != null && avatar.luaRuntime.vanilla_model.CHESTPLATE.getVisible() != null) ? avatar.luaRuntime.vanilla_model.CHESTPLATE.getVisible() : true;
@@ -102,7 +98,7 @@ public class BackpackLayer<T extends LivingEntity, M extends HumanoidModel<T>> e
         } else {
             renderBaseLayer(poseStack, buffer, packedLight, livingEntity, partialTicks, itemStack, true);
         }
-    }
+    }*/
 
 
     private void renderBaseLayer(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T livingEntity, float partialTicks, ItemStack itemStack, boolean copyPose) {

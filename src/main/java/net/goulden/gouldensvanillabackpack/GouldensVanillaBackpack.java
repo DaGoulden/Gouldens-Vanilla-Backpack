@@ -2,7 +2,7 @@ package net.goulden.gouldensvanillabackpack;
 
 import net.goulden.gouldensvanillabackpack.networking.BackpackOpenPayload;
 import net.goulden.gouldensvanillabackpack.networking.BackpackPayloadHandler;
-import com.spydnel.backpacks.registry.*;
+import net.goulden.gouldensvanillabackpack.registry.*;
 import net.goulden.gouldensvanillabackpack.registry.*;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.neoforged.bus.api.SubscribeEvent;

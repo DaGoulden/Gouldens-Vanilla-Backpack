@@ -1,4 +1,4 @@
-package net.goulden.gouldensvanillabackpack.mixins;
+/*package net.goulden.gouldensvanillabackpack.mixins;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.goulden.gouldensvanillabackpack.registry.BPItems;
@@ -22,3 +22,4 @@ public abstract class CapeLayerMixin {
         if (livingEntity.getItemBySlot(EquipmentSlot.CHEST).is(BPItems.BACKPACK)) {ci.cancel();}
     }
 }
+*/

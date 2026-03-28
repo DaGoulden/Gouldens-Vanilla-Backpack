@@ -1,4 +1,4 @@
-package net.goulden.gouldensvanillabackpack.mixins;
+/*package net.goulden.gouldensvanillabackpack.mixins;
 
 import net.goulden.gouldensvanillabackpack.registry.BPItems;
 import net.minecraft.core.component.DataComponents;
@@ -32,3 +32,4 @@ public abstract class ArmorSlotMixin extends Slot {
         if (item.is(BPItems.BACKPACK) && hasContainer && !isEmpty) { cir.setReturnValue(false); }
     }
 }
+*/

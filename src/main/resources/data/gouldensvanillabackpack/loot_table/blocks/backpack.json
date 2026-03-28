@@ -21,11 +21,11 @@
               "source": "block_entity"
             }
           ],
-          "name": "backpacks:backpack"
+          "name": "gouldensvanillabackpack:backpack"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "backpacks:blocks/backpack"
+  "random_sequence": "gouldensvanillabackpack:blocks/backpack"
 }

@@ -1,4 +1,4 @@
-package net.goulden.gouldensvanillabackpack.mixins.integration;
+/*package net.goulden.gouldensvanillabackpack.mixins.integration;
 
 import com.moulberry.mixinconstraints.annotations.IfModLoaded;
 import net.goulden.gouldensvanillabackpack.registry.BPItems;
@@ -40,3 +40,4 @@ public abstract class SpyglassImprovementsClientMixin {
         }
     }
 }
+*/

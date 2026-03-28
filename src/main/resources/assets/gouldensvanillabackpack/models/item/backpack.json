@@ -1,14 +1,14 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "backpacks:item/backpack"
+    "layer0": "gouldensvanillabackpack:item/backpack"
   },
   "overrides": [
     {
       "predicate": {
-        "backpacks:dyed": 1
+        "gouldensvanillabackpack:dyed": 1
       },
-      "model": "backpacks:item/dyed_backpack"
+      "model": "gouldensvanillabackpack:item/dyed_backpack"
     }
   ]
 }

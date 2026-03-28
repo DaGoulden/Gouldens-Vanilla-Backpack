@@ -1,4 +1,4 @@
-package net.goulden.gouldensvanillabackpack.mixins;
+/*package net.goulden.gouldensvanillabackpack.mixins;
 
 import net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlockEntity;
 import net.goulden.gouldensvanillabackpack.registry.BPBlocks;
@@ -75,3 +75,4 @@ public abstract class ItemEntityMixin extends Entity implements TraceableEntity 
         }
     }
 }
+*/

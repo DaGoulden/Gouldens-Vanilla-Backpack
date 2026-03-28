@@ -22,7 +22,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
-@EventBusSubscriber(modid = GouldensVanillaBackpack.MODID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = GouldensVanillaBackpack.MODID, value = Dist.CLIENT)
 public class BPLayers {
 
     public static final ModelLayerLocation BACKPACK = getLocation("backpack");
