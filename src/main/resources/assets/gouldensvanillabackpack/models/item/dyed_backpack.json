@@ -1,0 +1,8 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "backpacks:item/backpack_base",
+    "layer1": "backpacks:item/backpack_overlay"
+  }
+}
+

@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "net.goulden.gouldensvanillabackpack.mixins",
+  "plugin": "com.moulberry.mixinconstraints.ConstraintsMixinPlugin",
+  "mixins": [
+    "net.goulden.gouldensvanillabackpack.mixins.ArmorSlotMixin",
+    "net.goulden.gouldensvanillabackpack.mixins.ItemEntityMixin",
+    "net.goulden.gouldensvanillabackpack.mixins.LivingEntityMixin"
+  ],
+  "client": [
+    "net.goulden.gouldensvanillabackpack.mixins.CapeLayerMixin",
+    "net.goulden.gouldensvanillabackpack.mixins.integration.SpyglassImprovementsClientMixin"
+  ]
+}

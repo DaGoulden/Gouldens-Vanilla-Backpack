@@ -1,13 +1,4 @@
 {
-  "itemGroup.gouldensvanillabackpack": "Example Mod Tab",
-  "block.gouldensvanillabackpack.example_block": "Example Block",
-  "item.gouldensvanillabackpack.example_item": "Example Item",
-
-  "gouldensvanillabackpack.configuration.title": "Goulden's Vanilla Backpack Configs",
-  "gouldensvanillabackpack.configuration.section.gouldensvanillabackpack.common.toml": "Goulden's Vanilla Backpack Configs",
-  "gouldensvanillabackpack.configuration.section.gouldensvanillabackpack.common.toml.title": "Goulden's Vanilla Backpack Configs",
-  "gouldensvanillabackpack.configuration.items": "Item List",
-  "gouldensvanillabackpack.configuration.logDirtBlock": "Log Dirt Block",
-  "gouldensvanillabackpack.configuration.magicNumberIntroduction": "Magic Number Text",
-  "gouldensvanillabackpack.configuration.magicNumber": "Magic Number"
+  "block.backpacks.backpack": "Backpack",
+  "container.backpack": "Backpack"
 }
