@@ -12,7 +12,7 @@ public class BackpackPayloadHandler {
         context.enqueueWork(() -> {
             Entity entity = context.player().level().getEntity(payload.entityId());
             if (entity instanceof Player player) {
-                player.setData(BPDataAttachments.EQUIPPED_BACKPACK, payload.stack());
+                player.setData(BPDataAttachments.BACKPACK_SLOT, payload.stack());
             }
         });
     }

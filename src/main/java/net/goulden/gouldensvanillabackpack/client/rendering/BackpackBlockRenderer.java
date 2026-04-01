@@ -57,7 +57,7 @@ public class BackpackBlockRenderer implements BlockEntityRenderer<BackpackBlockE
     public void render(BackpackBlockEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
         poseStack.pushPose();
         boolean isFloating = blockEntity.getBlockState().getValue(BackpackBlock.FLOATING);
-        float dir = ((Direction)blockEntity.getBlockState().getValue(BackpackBlock.FACING)).toYRot();
+        float dir = blockEntity.getBlockState().getValue(BackpackBlock.FACING).toYRot();
         float lidRot = 0;
         float baseRotX = 0;
         float baseRotZ = 0;

@@ -31,7 +31,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
 
-public class BackpackBlock extends BaseEntityBlock implements Equipable, EntityBlock, SimpleWaterloggedBlock {
+public class BackpackBlock extends BaseEntityBlock implements EntityBlock, SimpleWaterloggedBlock {
     protected static final VoxelShape SHAPE_X;
     protected static final VoxelShape SHAPE_Z;
     protected static final VoxelShape FLOATING_SHAPE_X;
@@ -59,25 +59,19 @@ public class BackpackBlock extends BaseEntityBlock implements Equipable, EntityB
     }
 
     protected BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos currentPos, BlockPos facingPos) {
-        if ((Boolean)state.getValue(WATERLOGGED)) {
+        if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
         return state.setValue(FLOATING, level.getFluidState(currentPos.below()).isSource());
     }
 
     protected FluidState getFluidState(BlockState state) {
-        return (Boolean)state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return createTickerHelper(type, BPBlockEntities.BACKPACK.get(), BackpackBlockEntity::tick);
-    }
-
-    public EquipmentSlot getEquipmentSlot() { return EquipmentSlot.CHEST; }
-
-    public Holder<SoundEvent> getEquipSound() {
-        return BPSounds.BACKPACK_EQUIP;
     }
 
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
@@ -105,7 +99,7 @@ public class BackpackBlock extends BaseEntityBlock implements Equipable, EntityB
     }
 
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        Direction direction = (Direction)state.getValue(FACING);
+        Direction direction = state.getValue(FACING);
         if (state.getValue(FLOATING)) {
             return direction.getAxis() == Direction.Axis.X ? FLOATING_SHAPE_Z : FLOATING_SHAPE_X;
         } else {

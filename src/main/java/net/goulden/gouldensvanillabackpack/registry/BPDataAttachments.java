@@ -20,8 +20,8 @@ public class BPDataAttachments {
             "open_ticks", () -> AttachmentType.builder(() -> 0).serialize(Codec.INT).build()
     );
 
-    public static final Supplier<AttachmentType<ItemStack>> EQUIPPED_BACKPACK = ATTACHMENT_TYPES.register(
-            "equipped_backpack", () -> AttachmentType.builder(() -> ItemStack.EMPTY)
+    public static final Supplier<AttachmentType<ItemStack>> BACKPACK_SLOT = ATTACHMENT_TYPES.register(
+            "backpack_slot", () -> AttachmentType.builder(() -> ItemStack.EMPTY)
                     .serialize(ItemStack.OPTIONAL_CODEC)
                     .build()
     );

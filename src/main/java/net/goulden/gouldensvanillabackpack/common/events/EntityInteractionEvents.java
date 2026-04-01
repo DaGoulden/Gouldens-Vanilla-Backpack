@@ -8,7 +8,6 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ShulkerBoxMenu;
@@ -20,7 +19,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
-@SuppressWarnings("unused")
 @EventBusSubscriber(modid = GouldensVanillaBackpack.MODID)
 public class EntityInteractionEvents{
 
@@ -28,9 +26,10 @@ public class EntityInteractionEvents{
     public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
         Player player = event.getEntity();
         LivingEntity target = event.getTarget() instanceof LivingEntity ? (LivingEntity) event.getTarget() : null;
-        ItemStack item = target != null ? target.getData(BPDataAttachments.EQUIPPED_BACKPACK) : null;
+        if (target == null) return;
+        ItemStack item = target.getData(BPDataAttachments.BACKPACK_SLOT);
 
-        if (target != null && item.is(BPItems.BACKPACK) && isBehind(player, target)) {
+        if (item.is(BPItems.BACKPACK) && isBehind(player, target)) {
             BackpackItemContainer container = new BackpackItemContainer(target, player);
             if (!item.has(DataComponents.CONTAINER)) { item.set(DataComponents.CONTAINER, ItemContainerContents.EMPTY); }
             item.get(DataComponents.CONTAINER).copyInto(container.getItems());
