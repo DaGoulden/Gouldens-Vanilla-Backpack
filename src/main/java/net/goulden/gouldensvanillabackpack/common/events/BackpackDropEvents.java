@@ -63,29 +63,28 @@ public class BackpackDropEvents {
         Level level = itemEntity.level();
         if (level.isClientSide) return;
 
-        // Flotar más rápido en cualquier fluido
-        if (!level.getFluidState(itemEntity.blockPosition()).isEmpty()) {
-            Vec3 velocity = itemEntity.getDeltaMovement();
-            itemEntity.setDeltaMovement(velocity.x, velocity.y + 0.01, velocity.z);
-        }
-
         boolean inFluid = !level.getFluidState(itemEntity.blockPosition()).isEmpty();
         boolean onFluidSurface = inFluid && level.getFluidState(itemEntity.blockPosition().above()).isEmpty();
         boolean onGround = itemEntity.onGround() && !inFluid;
 
+        // Flotar más rápido en cualquier fluido
+        if (inFluid) {
+            Vec3 velocity = itemEntity.getDeltaMovement();
+            itemEntity.setDeltaMovement(velocity.x, velocity.y + 0.01, velocity.z);
+        }
+
         if (!onGround && !onFluidSurface) return;
 
-        BlockPos placePos = itemEntity.blockPosition();
+        BlockPos placePos = inFluid ? itemEntity.blockPosition().above() : itemEntity.blockPosition();
         if (!level.getBlockState(placePos).canBeReplaced()) return;
 
         BlockState state = BPBlocks.BACKPACK.get().defaultBlockState()
                 .setValue(BackpackBlock.FACING, Direction.NORTH)
-                .setValue(BackpackBlock.WATERLOGGED, /*level.getFluidState(itemEntity.blockPosition()).is(FluidTags.WATER)*/ false)
-                .setValue(BackpackBlock.FLOATING, true);
+                .setValue(BackpackBlock.FLOATING, inFluid);
 
-        BackpackBlockEntity blockEntity = new BackpackBlockEntity(placePos.above(), state);
+        BackpackBlockEntity blockEntity = new BackpackBlockEntity(placePos, state);
         blockEntity.applyComponentsFromItemStack(stack);
-        level.setBlockAndUpdate(placePos.above(), state);
+        level.setBlockAndUpdate(placePos, state);
         level.setBlockEntity(blockEntity);
 
         itemEntity.discard();

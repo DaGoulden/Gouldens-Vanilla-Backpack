@@ -51,17 +51,19 @@ public class BackpackEvents {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onRightClickBlock (PlayerInteractEvent.RightClickBlock event) {
 
+        if (event.getHand() != InteractionHand.MAIN_HAND) return;
+        Player player = event.getEntity();
+        if (!player.isCrouching()) return;
+        if (!player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) return;
         Level level = event.getLevel();
         BlockPos blockPos = event.getPos();
         BlockState blockState = level.getBlockState(blockPos);
-        Player player = event.getEntity();
         ItemStack equippedBackpackSlot = player.getData(BPDataAttachments.BACKPACK_SLOT);
         BlockEntity blockEntity = level.getBlockEntity(blockPos);
-        boolean isBareHand = event.getItemStack().isEmpty();
         boolean hasBackpack = !equippedBackpackSlot.isEmpty();
 
         // PICKUP BACKPACK
-        if (blockState.is(BPBlocks.BACKPACK) && player.isCrouching() && isBareHand && !hasBackpack) {
+        if (blockState.is(BPBlocks.BACKPACK) && !hasBackpack) {
 
             if (!level.isClientSide) {
                 ItemStack itemStack = new ItemStack(BPBlocks.BACKPACK);
@@ -87,8 +89,7 @@ public class BackpackEvents {
                 blockPos = blockPos.below();
             }
             BlockPos placePos = blockPos.above();
-            if (player.isCrouching() && isBareHand && hasBackpack
-                && level.getBlockState(placePos).canBeReplaced()
+            if (hasBackpack && level.getBlockState(placePos).canBeReplaced()
                 && level.isUnobstructed(BPBlocks.BACKPACK.get().defaultBlockState(), placePos, CollisionContext.of(player))) {
 
                 if (!level.isClientSide) {

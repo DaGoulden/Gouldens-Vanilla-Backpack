@@ -7,7 +7,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 
 public record BackpackOpenPayload(boolean isOpen, int id) implements CustomPacketPayload {
-    public static final Type<BackpackOpenPayload> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("mymod", "my_data"));
+    public static final Type<BackpackOpenPayload> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("gouldensvanillabackpack", "backpack_open"));
 
     public static final StreamCodec<ByteBuf, BackpackOpenPayload> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.BOOL,
