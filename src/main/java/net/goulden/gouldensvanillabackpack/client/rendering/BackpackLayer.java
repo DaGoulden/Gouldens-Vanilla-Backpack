@@ -30,7 +30,6 @@ import static net.goulden.gouldensvanillabackpack.registry.BPDataAttachments.OPE
 @OnlyIn(Dist.CLIENT)
 public class BackpackLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends RenderLayer<T, M>{
     private final ModelPart backpackModel;
-    private final ModelPart otherBackpackModel;
 
     private ModelPart model;
 
@@ -42,61 +41,19 @@ public class BackpackLayer<T extends LivingEntity, M extends HumanoidModel<T>> e
     public BackpackLayer(RenderLayerParent renderer, EntityModelSet entityModelSet) {
         super(renderer);
         this.backpackModel = entityModelSet.bakeLayer(BPLayers.BACKPACK);
-        this.otherBackpackModel = entityModelSet.bakeLayer(BPLayers.OTHER_BACKPACK);
-        this.parentBody = this.getParentBody(renderer);
+        this.parentBody = this.getParentModel().body;
     }
 
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T livingEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float headYaw, float headPitch) {
         ItemStack itemStack = livingEntity.getData(BPDataAttachments.BACKPACK_SLOT);
 
-        if (shouldRender(itemStack, livingEntity)) {
-            //VANITY STUFF
-            /*if (ModList.get().isLoaded("vanity")) {
-                ResourceLocation design = DesignHelper.getStyle(itemStack) != null ? DesignHelper.getStyle(itemStack).getFirst() : null;
-                //GouldensVanillaBackpack.LOGGER.debug(String.valueOf(design));
-                if (design == null) {
-                    this.model = backpackModel;
-                } else {
-                    String path = design.toString();
-                    GouldensVanillaBackpack.LOGGER.debug(path);
-                    switch (path) {
-                        case "gouldensvanillabackpack:test" -> this.model = otherBackpackModel;
-                        default -> this.model = backpackModel;
-                    }
-                }
-            } else {
-                this.model = backpackModel;
-            }*/
+        if (itemStack.getItem() == BPItems.BACKPACK.asItem()) {
+
             this.model = backpackModel;
 
-            //FIGURA STUFF
-            /*if (ModList.get().isLoaded("figura")) {
-                figuraCompatStuff(poseStack, buffer, packedLight, livingEntity, partialTicks, itemStack, this);
-            } else {
-                renderBaseLayer(poseStack, buffer, packedLight, livingEntity, partialTicks, itemStack, true);
-            }*/
             renderBaseLayer(poseStack, buffer, packedLight, livingEntity, partialTicks, itemStack, true);
         }
-
     }
-
-    //FIGURA STUFF
-    /*private void figuraCompatStuff(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T livingEntity, float partialTicks, ItemStack itemStack, BackpackLayer backpackLayer) {
-        Avatar avatar = AvatarManager.getAvatar(livingEntity);
-        if (avatar != null) {
-            boolean shouldRender = (avatar.luaRuntime != null && avatar.luaRuntime.vanilla_model.CHESTPLATE.getVisible() != null) ? avatar.luaRuntime.vanilla_model.CHESTPLATE.getVisible() : true;
-            boolean render = avatar.pivotPartRender(ParentType.ChestplatePivot, (stack) -> {
-                stack.scale(16.0F, 16.0F, 16.0F);
-                stack.mulPose(Axis.XP.rotationDegrees(180.0F));
-                stack.mulPose(Axis.YP.rotationDegrees(180.0F));
-                renderBaseLayer(stack, buffer, packedLight, livingEntity, partialTicks, itemStack, false);
-            });
-            if (!render && shouldRender) { renderBaseLayer(poseStack, buffer, packedLight, livingEntity, partialTicks, itemStack, true); }
-        } else {
-            renderBaseLayer(poseStack, buffer, packedLight, livingEntity, partialTicks, itemStack, true);
-        }
-    }*/
-
 
     private void renderBaseLayer(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T livingEntity, float partialTicks, ItemStack itemStack, boolean copyPose) {
         poseStack.pushPose();
@@ -131,16 +88,5 @@ public class BackpackLayer<T extends LivingEntity, M extends HumanoidModel<T>> e
         VertexConsumer vertexConsumer = ItemRenderer.getArmorFoilBuffer(buffer, RenderType.armorCutoutNoCull(OVERLAY_TEXTURE), itemStack.hasFoil());
 
         this.model.render(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.opaque(i));
-    }
-
-    public boolean shouldRender(ItemStack stack, T entity) {
-        return stack.getItem() == BPItems.BACKPACK.asItem();
-
-        //return true;
-    }
-
-
-    protected ModelPart getParentBody(RenderLayerParent<T, HumanoidModel<T>> renderer) {
-        return this.getParentModel().body;
     }
 }

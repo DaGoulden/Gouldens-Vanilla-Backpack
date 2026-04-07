@@ -12,7 +12,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -31,7 +30,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 import java.util.Objects;
 
 @EventBusSubscriber(modid = GouldensVanillaBackpack.MODID)
-public class BackpackDropEvents {
+public class BackpackOnDeathDropEvents {
 
     // Al morir: limpiar attachment y dropear como ítem
     @SubscribeEvent

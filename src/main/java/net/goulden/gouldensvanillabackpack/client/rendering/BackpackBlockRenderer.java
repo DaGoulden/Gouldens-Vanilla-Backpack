@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
@@ -25,33 +24,15 @@ public class BackpackBlockRenderer implements BlockEntityRenderer<BackpackBlockE
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID, "textures/entity/backpack.png");
     private static final ResourceLocation OVERLAY_TEXTURE = ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID, "textures/entity/backpack_overlay.png");
     private static final ResourceLocation BASE_TEXTURE = ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID, "textures/entity/backpack_base.png");
-    private final ModelPart backpack;
-    private final ModelPart backpack1;
-    private final ModelPart backpack2;
 
     private final ModelPart base;
     private final ModelPart lid;
 
     public BackpackBlockRenderer(BlockEntityRendererProvider.Context context) {
-        this.backpack = context.bakeLayer(BPLayers.BACKPACK_BLOCK);
-        this.backpack1 = context.bakeLayer(BPLayers.BACKPACK_BLOCK);
-        this.backpack2 = context.bakeLayer(BPLayers.BACKPACK_BLOCK);
+        ModelPart backpack = context.bakeLayer(BPLayers.BACKPACK_BLOCK);
         this.base = backpack.getChild("base");
         this.lid = base.getChild("lid");
     }
-
-//    public static LayerDefinition createBodyLayer() {
-//        MeshDefinition meshdefinition = new MeshDefinition();
-//        PartDefinition partdefinition = meshdefinition.getRoot();
-//
-//        PartDefinition base = partdefinition.addOrReplaceChild("base", CubeListBuilder.create().texOffs(0, 0).addBox(-5.0F, -11.0F, -4.0F, 10.0F, 11.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
-//
-//        PartDefinition lid = base.addOrReplaceChild("lid", CubeListBuilder.create().texOffs(0, 19).addBox(-5.5F, -2.0F, -0.5F, 11.0F, 5.0F, 9.0F, new CubeDeformation(0.0F))
-//                .texOffs(-9, 33).addBox(-5.5F, 1.0F, -0.5F, 11.0F, 0.0F, 9.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -11.0F, -4.0F));
-//
-//        return LayerDefinition.create(meshdefinition, 64, 64);
-//    }
-
 
     @Override
     public void render(BackpackBlockEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
@@ -62,7 +43,6 @@ public class BackpackBlockRenderer implements BlockEntityRenderer<BackpackBlockE
         float baseRotX = 0;
         float baseRotZ = 0;
         float basePosY = 24;
-        float baseScaleY = 0;
         poseStack.translate(0.5F, 0.5F, 0.5F);
         poseStack.mulPose(Axis.YP.rotationDegrees(-dir));
         poseStack.scale(1.0F, -1.0F, -1.0F);
@@ -121,22 +101,8 @@ public class BackpackBlockRenderer implements BlockEntityRenderer<BackpackBlockE
         if (FastColor.ARGB32.alpha(i) == 0) {
             return;
         }
-        ResourceLocation location = OVERLAY_TEXTURE;
-
-        /*if (ModList.get().isLoaded("iris")) {
-            irisCompatStuff(location);
-        }*/
 
         VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityCutoutNoCull(OVERLAY_TEXTURE));
         this.base.render(poseStack, vertexConsumer, packedLight, packedOverlay, FastColor.ARGB32.opaque(i));
-        //poseStack.popPose();
     }
-
-    /*private void irisCompatStuff(ResourceLocation location) {
-        if (WorldRenderingSettings.INSTANCE.getItemIds() != null) {
-            CapturedRenderingState.INSTANCE.setCurrentRenderedItem(WorldRenderingSettings.INSTANCE.getItemIds().applyAsInt(new NamespacedId(location.getNamespace(), location.getPath())));
-        }
-    }*/
-
-
 }

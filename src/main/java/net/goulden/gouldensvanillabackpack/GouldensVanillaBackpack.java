@@ -9,9 +9,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
-import org.slf4j.Logger;
-
-import com.mojang.logging.LogUtils;
 
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.bus.api.IEventBus;
@@ -21,7 +18,6 @@ import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 @Mod(GouldensVanillaBackpack.MODID)
 public class GouldensVanillaBackpack {
     public static final String MODID = "gouldensvanillabackpack";
-    public static final Logger LOGGER = LogUtils.getLogger();
 
     public GouldensVanillaBackpack(IEventBus modEventBus) {
         modEventBus.register(GouldensVanillaBackpack.class);

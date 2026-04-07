@@ -2,7 +2,6 @@ package net.goulden.gouldensvanillabackpack.registry;
 
 import net.goulden.gouldensvanillabackpack.GouldensVanillaBackpack;
 import net.goulden.gouldensvanillabackpack.client.models.BackpackModel;
-import net.goulden.gouldensvanillabackpack.client.models.variants.OtherBackpackModel;
 import net.goulden.gouldensvanillabackpack.client.rendering.BackpackBlockRenderer;
 import net.goulden.gouldensvanillabackpack.client.rendering.BackpackLayer;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -28,9 +27,6 @@ public class BPLayers {
     public static final ModelLayerLocation BACKPACK = getLocation("backpack");
     public static final ModelLayerLocation BACKPACK_BLOCK = getLocation("backpack_block");
 
-    public static final ModelLayerLocation OTHER_BACKPACK = getLocation("other_backpack");
-    public static final ModelLayerLocation OTHER_BACKPACK_BLOCK = getLocation("other_backpack_block");
-
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
@@ -54,9 +50,6 @@ public class BPLayers {
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(BACKPACK, BackpackModel::createBodyLayer);
         event.registerLayerDefinition(BACKPACK_BLOCK, BackpackModel::createBlockLayer);
-
-        event.registerLayerDefinition(OTHER_BACKPACK, OtherBackpackModel::createBodyLayer);
-        event.registerLayerDefinition(OTHER_BACKPACK_BLOCK, OtherBackpackModel::createBlockLayer);
     }
 
 

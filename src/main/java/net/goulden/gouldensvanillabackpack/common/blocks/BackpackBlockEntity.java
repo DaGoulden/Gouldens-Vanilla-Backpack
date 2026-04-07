@@ -40,7 +40,6 @@ public class BackpackBlockEntity extends RandomizableContainerBlockEntity {
         this.newlyPlaced = true;
     }
 
-
     public int getColor() {
         return color;
     }

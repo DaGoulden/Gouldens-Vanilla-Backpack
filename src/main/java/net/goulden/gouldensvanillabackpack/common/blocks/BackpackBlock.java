@@ -2,16 +2,11 @@ package net.goulden.gouldensvanillabackpack.common.blocks;
 
 import com.mojang.serialization.MapCodec;
 import net.goulden.gouldensvanillabackpack.registry.BPBlockEntities;
-import net.goulden.gouldensvanillabackpack.registry.BPSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;

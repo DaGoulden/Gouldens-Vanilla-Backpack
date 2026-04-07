@@ -14,7 +14,7 @@ public class BPBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(GouldensVanillaBackpack.MODID);
 
     public static final DeferredBlock<BackpackBlock> BACKPACK = BLOCKS.register(
-            "backpack", () -> new BackpackBlock(ofFullCopy(Blocks.BROWN_WOOL)
+            "backpack", () -> new BackpackBlock(ofFullCopy(Blocks.WHITE_WOOL)
                     .sound(new SoundType(1.0F, 1.0F,
                             SoundEvents.WOOL_BREAK,
                             SoundEvents.WOOL_STEP,
