@@ -8,7 +8,6 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 
 public class BackpackRecipeSerializer implements RecipeSerializer<BackpackRecipe> {
 
-    @SuppressWarnings("unchecked")
     private static final RecipeSerializer<ShapedRecipe> SHAPED = RecipeSerializer.SHAPED_RECIPE;
 
     @Override
