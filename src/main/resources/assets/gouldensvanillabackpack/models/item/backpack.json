@@ -1,15 +1,7 @@
 {
-  "parent": "item/generated",
+  "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "gouldensvanillabackpack:item/backpack"
-  },
-  "overrides": [
-    {
-      "predicate": {
-        "gouldensvanillabackpack:dyed": 1
-      },
-      "model": "gouldensvanillabackpack:item/dyed_backpack"
-    }
-  ]
+    "layer0": "gouldensvanillabackpack:item/backpack_base",
+    "layer1": "gouldensvanillabackpack:item/backpack_lid"
+  }
 }
-

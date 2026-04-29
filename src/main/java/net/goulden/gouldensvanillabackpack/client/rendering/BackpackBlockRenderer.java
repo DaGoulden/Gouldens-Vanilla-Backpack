@@ -21,9 +21,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class BackpackBlockRenderer implements BlockEntityRenderer<BackpackBlockEntity> {
 
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID, "textures/entity/backpack.png");
-    private static final ResourceLocation OVERLAY_TEXTURE = ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID, "textures/entity/backpack_overlay.png");
-    private static final ResourceLocation BASE_TEXTURE = ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID, "textures/entity/backpack_base.png");
+    private static final ResourceLocation OVERLAY_TEXTURE = ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID,
+            "textures/entity/backpack_overlay.png");
 
     private final ModelPart base;
     private final ModelPart lid;
@@ -35,36 +34,39 @@ public class BackpackBlockRenderer implements BlockEntityRenderer<BackpackBlockE
     }
 
     @Override
-    public void render(BackpackBlockEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
+    public void render(BackpackBlockEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource buffer,
+                       int packedLight, int packedOverlay) {
+
         poseStack.pushPose();
+
         boolean isFloating = blockEntity.getBlockState().getValue(BackpackBlock.FLOATING);
         float dir = blockEntity.getBlockState().getValue(BackpackBlock.FACING).toYRot();
         float lidRot = 0;
         float baseRotX = 0;
         float baseRotZ = 0;
         float basePosY = 24;
+
         poseStack.translate(0.5F, 0.5F, 0.5F);
         poseStack.mulPose(Axis.YP.rotationDegrees(-dir));
         poseStack.scale(1.0F, -1.0F, -1.0F);
         poseStack.translate(0.0F, isFloating ? -0.8F : -1.0F, 0.0F);
 
-
         if (blockEntity.open && blockEntity.openTicks < 10) {
-            float t = ((float)blockEntity.openTicks + partialTick);
-            lidRot = (float) Math.pow(2, -1 * t) * Mth.sin((t - 0.75F) * 0.7F) +1;
-        } else if (blockEntity.openTicks == 10){
+            float t = blockEntity.openTicks + partialTick;
+            lidRot = (float) Math.pow(2, -1 * t) * Mth.sin((t - 0.75F) * 0.7F) + 1;
+        } else if (blockEntity.openTicks == 10) {
             lidRot = 1;
-        } else if (blockEntity.openTicks > 0){
-            float t = ((float)blockEntity.openTicks - partialTick);
-            lidRot = (float) -Math.pow(2, t -10) * Mth.sin((t - 10.75F) * 0.7F);
+        } else if (blockEntity.openTicks > 0) {
+            float t = blockEntity.openTicks - partialTick;
+            lidRot = (float) -Math.pow(2, t - 10) * Mth.sin((t - 10.75F) * 0.7F);
         }
 
         if (blockEntity.placeTicks <= 3 && blockEntity.newlyPlaced) {
-            float t = ((float)blockEntity.placeTicks + partialTick) / 4;
-            basePosY = t * t * 4 +20;
+            float t = (blockEntity.placeTicks + partialTick) / 4;
+            basePosY = t * t * 4 + 20;
         }
         if (blockEntity.placeTicks <= 7 && blockEntity.newlyPlaced) {
-            float t = ((float)blockEntity.placeTicks + partialTick) / 8;
+            float t = (blockEntity.placeTicks + partialTick) / 8;
             baseRotX = Mth.sin(t * 10) * 0.1F * (1 - t);
             baseRotZ = Mth.cos(t * 10) * 0.1F * (1 - t);
         }
@@ -81,28 +83,21 @@ public class BackpackBlockRenderer implements BlockEntityRenderer<BackpackBlockE
         this.base.zRot = baseRotZ;
         this.base.y = basePosY;
 
-        renderBaseLayer(blockEntity, poseStack, buffer, packedLight, packedOverlay);
-        if (blockEntity.getColor() != 0) {
-            renderColoredLayer(blockEntity, poseStack, buffer, packedLight, packedOverlay);
+        // base.render() renderiza el cuerpo + tapa (lid es hijo de base)
+        if (blockEntity.getBaseColor() != 0) {
+            VertexConsumer vcBase = buffer.getBuffer(RenderType.entityCutoutNoCull(OVERLAY_TEXTURE));
+            this.base.render(poseStack, vcBase, packedLight, packedOverlay, FastColor.ARGB32.opaque(blockEntity.getBaseColor()));
         }
+
+        // Para renderizar solo la tapa con lidColor hay que entrar al espacio de base primero
+        if (blockEntity.getLidColor() != 0) {
+            poseStack.pushPose();
+            this.base.translateAndRotate(poseStack);
+            VertexConsumer vcLid = buffer.getBuffer(RenderType.entityCutoutNoCull(OVERLAY_TEXTURE));
+            this.lid.render(poseStack, vcLid, packedLight, packedOverlay, FastColor.ARGB32.opaque(blockEntity.getLidColor()));
+            poseStack.popPose();
+        }
+
         poseStack.popPose();
-
-    }
-
-    private void renderBaseLayer(BackpackBlockEntity blockEntity, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
-
-        ResourceLocation location = blockEntity.getColor() == 0 ? TEXTURE : BASE_TEXTURE;
-        VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityCutoutNoCull(location));
-        this.base.render(poseStack, vertexConsumer, packedLight, packedOverlay);
-    }
-
-    private void renderColoredLayer(BackpackBlockEntity blockEntity, PoseStack poseStack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
-        int i = FastColor.ARGB32.opaque(blockEntity.getColor());
-        if (FastColor.ARGB32.alpha(i) == 0) {
-            return;
-        }
-
-        VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityCutoutNoCull(OVERLAY_TEXTURE));
-        this.base.render(poseStack, vertexConsumer, packedLight, packedOverlay, FastColor.ARGB32.opaque(i));
     }
 }

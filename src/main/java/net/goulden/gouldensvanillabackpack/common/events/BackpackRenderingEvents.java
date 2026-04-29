@@ -16,7 +16,6 @@ public class BackpackRenderingEvents {
 
     @SubscribeEvent
     public static void onStartTracking(PlayerEvent.StartTracking event) {
-
         if (event.getTarget() instanceof Player trackedPlayer) {
             ItemStack equipped = trackedPlayer.getData(BPDataAttachments.BACKPACK_SLOT);
             if (!equipped.isEmpty()) {

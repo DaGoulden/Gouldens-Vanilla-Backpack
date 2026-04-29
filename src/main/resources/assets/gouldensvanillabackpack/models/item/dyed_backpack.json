@@ -1,8 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "gouldensvanillabackpack:item/backpack_base",
-    "layer1": "gouldensvanillabackpack:item/backpack_overlay"
-  }
-}
-

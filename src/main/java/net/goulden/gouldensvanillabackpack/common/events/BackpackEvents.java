@@ -1,6 +1,8 @@
 package net.goulden.gouldensvanillabackpack.common.events;
 
 import net.goulden.gouldensvanillabackpack.GouldensVanillaBackpack;
+import net.goulden.gouldensvanillabackpack.client.rendering.BackpackBlockRenderer;
+import net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlock;
 import net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlockEntity;
 import net.goulden.gouldensvanillabackpack.networking.BackpackEquipPayload;
 import net.goulden.gouldensvanillabackpack.registry.BPBlocks;
@@ -15,6 +17,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
@@ -38,7 +41,6 @@ public class BackpackEvents {
         if (event.getHand() != InteractionHand.MAIN_HAND) return;
         Player player = event.getEntity();
         if (!player.isCrouching()) return;
-        if (!player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) return;
         Level level = event.getLevel();
         BlockPos blockPos = event.getPos();
         BlockState blockState = level.getBlockState(blockPos);
@@ -46,52 +48,71 @@ public class BackpackEvents {
         BlockEntity blockEntity = level.getBlockEntity(blockPos);
         boolean hasBackpack = !equippedBackpackSlot.isEmpty();
 
-        // PICKUP BACKPACK
-        if (blockState.is(BPBlocks.BACKPACK) && !hasBackpack) {
+        if (player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
 
-            if (!level.isClientSide) {
-                ItemStack itemStack = new ItemStack(BPBlocks.BACKPACK);
-                itemStack.applyComponents(blockEntity != null ? blockEntity.collectComponents() : null);
-                player.setData(BPDataAttachments.BACKPACK_SLOT, itemStack);
-                PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new BackpackEquipPayload(player.getId(), itemStack));
-                level.removeBlockEntity(blockPos);
-                level.removeBlock(blockPos, false);
-                level.playSound(null, blockPos.above(), BPSounds.BACKPACK_EQUIP.value(), SoundSource.BLOCKS);
-                addParticles(level, blockPos);
-            } else {
-                player.swing(InteractionHand.MAIN_HAND);
-            }
-
-            event.setCancellationResult(InteractionResult.FAIL);
-            event.setCanceled(true);
-        }
-
-        // PLACE BACKPACK
-        if (event.getHitVec().getDirection() == Direction.UP || level.getBlockState(blockPos).canBeReplaced()) {
-
-            while (level.getBlockState(blockPos).canBeReplaced()) {
-                blockPos = blockPos.below();
-            }
-            BlockPos placePos = blockPos.above();
-            if (hasBackpack && level.getBlockState(placePos).canBeReplaced()
-                && level.isUnobstructed(BPBlocks.BACKPACK.get().defaultBlockState(), placePos, CollisionContext.of(player))) {
+            // PICKUP BACKPACK
+            if (blockEntity instanceof BackpackBlockEntity && !hasBackpack) {
 
                 if (!level.isClientSide) {
-                    BlockState state = BPBlocks.BACKPACK.get().defaultBlockState()
-                            .setValue(FACING, player.getDirection())
-                            .setValue(WATERLOGGED, level.getFluidState(placePos).getType() == Fluids.WATER);
-                    blockEntity = new BackpackBlockEntity(placePos, state);
-                    blockEntity.applyComponentsFromItemStack(equippedBackpackSlot);
-                    player.setData(BPDataAttachments.BACKPACK_SLOT, ItemStack.EMPTY);
-                    PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new BackpackEquipPayload(player.getId(), ItemStack.EMPTY));
-                    level.setBlockAndUpdate(placePos, state);
-                    level.setBlockEntity(blockEntity);
-                    level.playSound(null, placePos, BPSounds.BACKPACK_PLACE.value(), SoundSource.BLOCKS);
+                    ItemStack itemStack = new ItemStack(BPBlocks.BACKPACK);
+                    itemStack.applyComponents(blockEntity.collectComponents());
+                    player.setData(BPDataAttachments.BACKPACK_SLOT, itemStack);
+                    PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new BackpackEquipPayload(player.getId(), itemStack));
+                    level.removeBlockEntity(blockPos);
+                    level.removeBlock(blockPos, false);
+                    level.playSound(null, blockPos.above(), BPSounds.BACKPACK_EQUIP.value(), SoundSource.BLOCKS);
+                    addParticles(level, blockPos);
                 } else {
                     player.swing(InteractionHand.MAIN_HAND);
                 }
+                event.setCanceled(true);
+            }
 
-                event.setCancellationResult(InteractionResult.FAIL);
+            // PLACE BACKPACK
+            if (event.getHitVec().getDirection() == Direction.UP || level.getBlockState(blockPos).canBeReplaced()) {
+
+                while (level.getBlockState(blockPos).canBeReplaced()) {
+                    blockPos = blockPos.below();
+                }
+                BlockPos placePos = blockPos.above();
+                if (hasBackpack && level.getBlockState(placePos).canBeReplaced()
+                        && level.isUnobstructed(BPBlocks.BACKPACK.get().defaultBlockState(), placePos, CollisionContext.of(player))) {
+
+                    if (!level.isClientSide) {
+                        BlockState state = BPBlocks.BACKPACK.get().defaultBlockState()
+                                .setValue(FACING, player.getDirection())
+                                .setValue(WATERLOGGED, level.getFluidState(placePos).getType() == Fluids.WATER);
+                        blockEntity = new BackpackBlockEntity(placePos, state);
+                        blockEntity.applyComponentsFromItemStack(equippedBackpackSlot);
+                        player.setData(BPDataAttachments.BACKPACK_SLOT, ItemStack.EMPTY);
+                        PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new BackpackEquipPayload(player.getId(), ItemStack.EMPTY));
+                        level.setBlockAndUpdate(placePos, state);
+                        level.setBlockEntity(blockEntity);
+                        level.playSound(null, placePos, BPSounds.BACKPACK_PLACE.value(), SoundSource.BLOCKS);
+                    } else {
+                        player.swing(InteractionHand.MAIN_HAND);
+                    }
+                    event.setCanceled(true);
+                }
+            }
+
+        } else {
+
+            // DYE BACKPACK
+            if ((blockEntity instanceof BackpackBlockEntity be) && (event.getItemStack().getItem() instanceof DyeItem dyeItem)) {
+
+                if (!level.isClientSide) {
+                    int color = dyeItem.getDyeColor().getTextureDiffuseColor();
+                    double hitY = event.getHitVec().getLocation().y - blockPos.getY();
+                    boolean isFloating = level.getBlockState(blockPos).getValue(BackpackBlock.FLOATING);
+                    if (hitY > (isFloating ? 0.35 : 0.5)) {
+                        be.setLidColor(color);
+                    } else {
+                        be.setBaseColor(color);
+                    }
+                    level.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS);
+                    if (!player.isCreative()) event.getItemStack().shrink(1);
+                }
                 event.setCanceled(true);
             }
         }

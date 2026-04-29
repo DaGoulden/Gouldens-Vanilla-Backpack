@@ -1,6 +1,7 @@
 package net.goulden.gouldensvanillabackpack.common.blocks;
 
 import net.goulden.gouldensvanillabackpack.registry.BPBlockEntities;
+import net.goulden.gouldensvanillabackpack.registry.BPDataAttachments;
 import net.goulden.gouldensvanillabackpack.registry.BPSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -32,7 +33,8 @@ public class BackpackBlockEntity extends RandomizableContainerBlockEntity {
     public int floatTicks;
     public boolean open;
     private int openCount;
-    private int color;
+    private int baseColor;
+    private int lidColor;
 
     public BackpackBlockEntity(BlockPos pos, BlockState blockState) {
         super(BPBlockEntities.BACKPACK.get(), pos, blockState);
@@ -40,9 +42,11 @@ public class BackpackBlockEntity extends RandomizableContainerBlockEntity {
         this.newlyPlaced = true;
     }
 
-    public int getColor() {
-        return color;
-    }
+    public int getBaseColor() { return baseColor; }
+    public int getLidColor() { return lidColor; }
+
+    public void setBaseColor(int color) { this.baseColor = color; setChanged(); }
+    public void setLidColor(int color) { this.lidColor = color; setChanged(); }
 
     public boolean triggerEvent(int id, int type) {
         if (id == 1) {
@@ -93,11 +97,9 @@ public class BackpackBlockEntity extends RandomizableContainerBlockEntity {
         }
     }
 
-
     protected Component getDefaultName() {
         return Component.translatable("container.backpack");
     }
-
 
     protected NonNullList<ItemStack> getItems() {
         return this.itemStacks;
@@ -106,7 +108,6 @@ public class BackpackBlockEntity extends RandomizableContainerBlockEntity {
     protected void setItems(NonNullList<ItemStack> items) {
         this.itemStacks = items;
     }
-
 
     protected AbstractContainerMenu createMenu(int id, Inventory player) {
         return new ShulkerBoxMenu(id, player, this);
@@ -127,8 +128,8 @@ public class BackpackBlockEntity extends RandomizableContainerBlockEntity {
             ContainerHelper.saveAllItems(tag, this.itemStacks, false, registries);
         }
         tag.putInt("FloatTicks", this.floatTicks);
-        tag.putBoolean("NewlyPlaced", this.newlyPlaced);
-        tag.putInt("Color", this.color);
+        tag.putInt("BaseColor", this.baseColor);
+        tag.putInt("LidColor", this.lidColor);
         setChanged();
     }
 
@@ -140,17 +141,18 @@ public class BackpackBlockEntity extends RandomizableContainerBlockEntity {
         return tag;
     }
 
-    protected void applyImplicitComponents(DataComponentInput componentInput) {
-        super.applyImplicitComponents(componentInput);
-        DyedItemColor dyedItemColor = componentInput.get(DataComponents.DYED_COLOR);
-        this.color = dyedItemColor != null ? dyedItemColor.rgb() : 0;
+    protected void applyImplicitComponents(DataComponentInput input) {
+        super.applyImplicitComponents(input);
+        Integer lid = input.get(BPDataAttachments.LID_COLOR.get());
+        Integer base = input.get(BPDataAttachments.BASE_COLOR.get());
+        this.baseColor = base != null ? base : 0;
+        this.lidColor = lid != null ? lid : 0;
     }
 
     protected void collectImplicitComponents(DataComponentMap.Builder components) {
         super.collectImplicitComponents(components);
-        if (color != 0) {
-            components.set(DataComponents.DYED_COLOR, new DyedItemColor(color, true));
-        }
+        if (baseColor != 0) components.set(BPDataAttachments.BASE_COLOR.get(), baseColor);
+        if (lidColor != 0) components.set(BPDataAttachments.LID_COLOR.get(), lidColor);
     }
 
     public void loadFromTag(CompoundTag tag, HolderLookup.Provider levelRegistry) {
@@ -159,8 +161,8 @@ public class BackpackBlockEntity extends RandomizableContainerBlockEntity {
             ContainerHelper.loadAllItems(tag, this.itemStacks, levelRegistry);
         }
         this.floatTicks = tag.getInt("FloatTicks");
-        this.newlyPlaced = tag.getBoolean("NewlyPlaced");
-        this.color = tag.getInt("Color");
+        this.baseColor = tag.getInt("BaseColor");
+        this.lidColor = tag.getInt("LidColor");
     }
 
     public int getContainerSize() {

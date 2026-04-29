@@ -1,17 +1,19 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "gouldensvanillabackpack:backpack",
+  "category": "misc",
   "key": {
-    "#": {
-      "item": "minecraft:leather"
-    }
+    "#": { "item": "minecraft:leather" },
+    "A": { "item": "minecraft:chest" },
+    "B": { "tag": "c:dyes" },
+    "C": { "tag": "c:dyes" }
   },
   "pattern": [
-    "###",
-    "# #",
-    "###"
+    "#B#",
+    "#A#",
+    "#C#"
   ],
   "result": {
-    "count": 1,
-    "id": "gouldensvanillabackpack:backpack"
+    "id": "gouldensvanillabackpack:backpack",
+    "count": 1
   }
 }

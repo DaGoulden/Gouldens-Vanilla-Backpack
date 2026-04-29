@@ -1,9 +1,8 @@
 package net.goulden.gouldensvanillabackpack;
 
-import net.goulden.gouldensvanillabackpack.networking.BackpackEquipPayload;
-import net.goulden.gouldensvanillabackpack.networking.BackpackOpenPayload;
-import net.goulden.gouldensvanillabackpack.networking.BackpackPayloadHandler;
+import net.goulden.gouldensvanillabackpack.networking.*;
 import net.goulden.gouldensvanillabackpack.registry.*;
+import net.minecraft.util.FastColor;
 import net.minecraft.world.item.component.DyedItemColor;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
@@ -22,10 +21,12 @@ public class GouldensVanillaBackpack {
     public GouldensVanillaBackpack(IEventBus modEventBus) {
         modEventBus.register(GouldensVanillaBackpack.class);
 
-        BPDataAttachments.ATTACHMENT_TYPES.register(modEventBus);
-        BPBlocks.BLOCKS.register(modEventBus);
-        BPItems.ITEMS.register(modEventBus);
         BPBlockEntities.BLOCK_ENTITY_TYPES.register(modEventBus);
+        BPBlocks.BLOCKS.register(modEventBus);
+        BPDataAttachments.ATTACHMENT_TYPES.register(modEventBus);
+        BPDataAttachments.COMPONENTS.register(modEventBus);
+        BPItems.ITEMS.register(modEventBus);
+        BPRecipes.SERIALIZERS.register(modEventBus);
         BPSounds.SOUND_EVENTS.register(modEventBus);
     }
 
@@ -47,8 +48,19 @@ public class GouldensVanillaBackpack {
 
     @SubscribeEvent
     public static void registerItemColorHandlers(RegisterColorHandlersEvent.Item event) {
-        event.register((stack, tintIndex) -> tintIndex == 0 ? -1 :DyedItemColor.getOrDefault(stack, -1),
-                BPItems.BACKPACK.value());
+        event.register((stack, tintIndex) -> {
+            return switch (tintIndex) {
+                case 0 -> {
+                    Integer color = stack.get(BPDataAttachments.BASE_COLOR.get());
+                    yield color != null ? FastColor.ARGB32.opaque(color) : -1;
+                }
+                case 1 -> {
+                    Integer color = stack.get(BPDataAttachments.LID_COLOR.get());
+                    yield color != null ? FastColor.ARGB32.opaque(color) : -1;
+                }
+                default -> -1;
+            };
+        }, BPItems.BACKPACK.value());
     }
 
     @SubscribeEvent

@@ -122,9 +122,9 @@ public class BackpackBlock extends BaseEntityBlock implements EntityBlock, Simpl
         FACING = HorizontalDirectionalBlock.FACING;
         FLOATING = BooleanProperty.create("floating");
         WATERLOGGED = BlockStateProperties.WATERLOGGED;
-        SHAPE_X = Block.box(3.0, 0.0, 4.0, 13.0, 11.0, 12.0);
-        SHAPE_Z = Block.box(4.0, 0.0, 3.0, 12.0, 11.0, 13.0);
-        FLOATING_SHAPE_X = Block.box(3.0, 0.0, 4.0, 13.0, 8.0, 12.0);
-        FLOATING_SHAPE_Z = Block.box(4.0, 0.0, 3.0, 12.0, 8.0, 13.0);
+        SHAPE_X = Block.box(3.0, 0.0, 4.0, 13.0, 12.5, 12.0);
+        SHAPE_Z = Block.box(4.0, 0.0, 3.0, 12.0, 12.5, 13.0);
+        FLOATING_SHAPE_X = Block.box(3.0, -2.5, 4.0, 13.0, 8.5, 12.0);
+        FLOATING_SHAPE_Z = Block.box(4.0, -2.5, 3.0, 12.0, 8.5, 13.0);
     }
 }
