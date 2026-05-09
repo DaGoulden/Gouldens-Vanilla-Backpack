@@ -1,12 +1,11 @@
 package net.goulden.gouldensvanillabackpack.common.events;
 
 import net.goulden.gouldensvanillabackpack.GouldensVanillaBackpack;
-import net.goulden.gouldensvanillabackpack.client.rendering.BackpackBlockRenderer;
 import net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlock;
 import net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlockEntity;
 import net.goulden.gouldensvanillabackpack.networking.BackpackEquipPayload;
 import net.goulden.gouldensvanillabackpack.registry.BPBlocks;
-import net.goulden.gouldensvanillabackpack.registry.BPDataAttachments;
+import net.goulden.gouldensvanillabackpack.registry.BPAttachments;
 import net.goulden.gouldensvanillabackpack.registry.BPSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,7 +24,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.minecraft.world.InteractionResult;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -44,7 +42,7 @@ public class BackpackEvents {
         Level level = event.getLevel();
         BlockPos blockPos = event.getPos();
         BlockState blockState = level.getBlockState(blockPos);
-        ItemStack equippedBackpackSlot = player.getData(BPDataAttachments.BACKPACK_SLOT);
+        ItemStack equippedBackpackSlot = player.getData(BPAttachments.BACKPACK_SLOT);
         BlockEntity blockEntity = level.getBlockEntity(blockPos);
         boolean hasBackpack = !equippedBackpackSlot.isEmpty();
 
@@ -56,7 +54,7 @@ public class BackpackEvents {
                 if (!level.isClientSide) {
                     ItemStack itemStack = new ItemStack(BPBlocks.BACKPACK);
                     itemStack.applyComponents(blockEntity.collectComponents());
-                    player.setData(BPDataAttachments.BACKPACK_SLOT, itemStack);
+                    player.setData(BPAttachments.BACKPACK_SLOT, itemStack);
                     PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new BackpackEquipPayload(player.getId(), itemStack));
                     level.removeBlockEntity(blockPos);
                     level.removeBlock(blockPos, false);
@@ -84,7 +82,7 @@ public class BackpackEvents {
                                 .setValue(WATERLOGGED, level.getFluidState(placePos).getType() == Fluids.WATER);
                         blockEntity = new BackpackBlockEntity(placePos, state);
                         blockEntity.applyComponentsFromItemStack(equippedBackpackSlot);
-                        player.setData(BPDataAttachments.BACKPACK_SLOT, ItemStack.EMPTY);
+                        player.setData(BPAttachments.BACKPACK_SLOT, ItemStack.EMPTY);
                         PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new BackpackEquipPayload(player.getId(), ItemStack.EMPTY));
                         level.setBlockAndUpdate(placePos, state);
                         level.setBlockEntity(blockEntity);

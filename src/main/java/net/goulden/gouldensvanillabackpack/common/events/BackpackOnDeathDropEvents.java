@@ -5,7 +5,7 @@ import net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlock;
 import net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlockEntity;
 import net.goulden.gouldensvanillabackpack.networking.BackpackEquipPayload;
 import net.goulden.gouldensvanillabackpack.registry.BPBlocks;
-import net.goulden.gouldensvanillabackpack.registry.BPDataAttachments;
+import net.goulden.gouldensvanillabackpack.registry.BPAttachments;
 import net.goulden.gouldensvanillabackpack.registry.BPItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -37,10 +37,10 @@ public class BackpackOnDeathDropEvents {
     public static void onPlayerDeath(LivingDeathEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
-        ItemStack equipped = player.getData(BPDataAttachments.BACKPACK_SLOT);
+        ItemStack equipped = player.getData(BPAttachments.BACKPACK_SLOT);
         if (equipped.isEmpty()) return;
 
-        player.setData(BPDataAttachments.BACKPACK_SLOT, ItemStack.EMPTY);
+        player.setData(BPAttachments.BACKPACK_SLOT, ItemStack.EMPTY);
         PacketDistributor.sendToPlayersTrackingEntityAndSelf(player,
                 new BackpackEquipPayload(player.getId(), ItemStack.EMPTY));
 
@@ -102,11 +102,11 @@ public class BackpackOnDeathDropEvents {
         if (!hasContainer || isEmpty) return;
 
         Player player = event.getPlayer();
-        ItemStack equipped = player.getData(BPDataAttachments.BACKPACK_SLOT);
+        ItemStack equipped = player.getData(BPAttachments.BACKPACK_SLOT);
         if (!equipped.isEmpty()) return;
 
         if (!event.getItemEntity().hasPickUpDelay() && !player.level().isClientSide()) {
-            player.setData(BPDataAttachments.BACKPACK_SLOT, stack.copy());
+            player.setData(BPAttachments.BACKPACK_SLOT, stack.copy());
             PacketDistributor.sendToPlayersTrackingEntityAndSelf(player,
                     new BackpackEquipPayload(player.getId(), stack.copy()));
             player.take(event.getItemEntity(), 1);

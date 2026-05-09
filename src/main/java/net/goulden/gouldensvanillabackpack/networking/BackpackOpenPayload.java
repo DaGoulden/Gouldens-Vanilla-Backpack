@@ -1,21 +1,23 @@
 package net.goulden.gouldensvanillabackpack.networking;
 
 import io.netty.buffer.ByteBuf;
+import net.goulden.gouldensvanillabackpack.GouldensVanillaBackpack;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 
 public record BackpackOpenPayload(boolean isOpen, int id) implements CustomPacketPayload {
-    public static final Type<BackpackOpenPayload> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("gouldensvanillabackpack", "backpack_open"));
+    public static final Type<BackpackOpenPayload> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID, "backpack_open"));
 
-    public static final StreamCodec<ByteBuf, BackpackOpenPayload> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.BOOL,
-            BackpackOpenPayload::isOpen,
-            ByteBufCodecs.INT,
-            BackpackOpenPayload::id,
-            BackpackOpenPayload::new
-    );
+    public static final StreamCodec<ByteBuf, BackpackOpenPayload> STREAM_CODEC =
+            StreamCodec.composite(
+                    ByteBufCodecs.BOOL,
+                    BackpackOpenPayload::isOpen,
+                    ByteBufCodecs.INT,
+                    BackpackOpenPayload::id,
+                    BackpackOpenPayload::new
+            );
 
     @Override
     public Type<? extends CustomPacketPayload> type() {

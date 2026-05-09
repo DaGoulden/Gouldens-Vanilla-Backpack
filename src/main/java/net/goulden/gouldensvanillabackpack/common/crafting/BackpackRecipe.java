@@ -1,6 +1,7 @@
 package net.goulden.gouldensvanillabackpack.common.crafting;
 
-import net.goulden.gouldensvanillabackpack.registry.BPDataAttachments;
+import net.goulden.gouldensvanillabackpack.registry.BPAttachments;
+import net.goulden.gouldensvanillabackpack.registry.BPDataComponents;
 import net.goulden.gouldensvanillabackpack.registry.BPItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.DyeItem;
@@ -47,10 +48,10 @@ public class BackpackRecipe extends ShapedRecipe {
 
             int row = i / input.width();
             if (row == 0) {
-                result.set(BPDataAttachments.LID_COLOR.get(),
+                result.set(BPDataComponents.LID_COLOR.get(),
                         dyeItem.getDyeColor().getTextureDiffuseColor());
             } else if (row == 2) {
-                result.set(BPDataAttachments.BASE_COLOR.get(),
+                result.set(BPDataComponents.BASE_COLOR.get(),
                         dyeItem.getDyeColor().getTextureDiffuseColor());
             }
         }

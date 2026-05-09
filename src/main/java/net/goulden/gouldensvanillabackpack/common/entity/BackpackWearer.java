@@ -1,4 +1,4 @@
-package net.goulden.gouldensvanillabackpack;
+package net.goulden.gouldensvanillabackpack.common.entity;
 
 public interface BackpackWearer {
 

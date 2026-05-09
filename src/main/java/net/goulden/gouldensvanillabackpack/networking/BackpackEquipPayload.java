@@ -9,9 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 public record BackpackEquipPayload(int entityId, ItemStack stack) implements CustomPacketPayload {
-
-    public static final Type<BackpackEquipPayload> TYPE =
-            new Type<>(ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID, "backpack_equip"));
+    public static final Type<BackpackEquipPayload> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID, "backpack_equip"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, BackpackEquipPayload> STREAM_CODEC =
             StreamCodec.composite(

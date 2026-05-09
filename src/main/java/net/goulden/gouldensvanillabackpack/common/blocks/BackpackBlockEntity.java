@@ -1,13 +1,12 @@
 package net.goulden.gouldensvanillabackpack.common.blocks;
 
 import net.goulden.gouldensvanillabackpack.registry.BPBlockEntities;
-import net.goulden.gouldensvanillabackpack.registry.BPDataAttachments;
+import net.goulden.gouldensvanillabackpack.registry.BPDataComponents;
 import net.goulden.gouldensvanillabackpack.registry.BPSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponentMap;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -18,7 +17,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ShulkerBoxMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.DyedItemColor;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.*;
@@ -143,16 +141,16 @@ public class BackpackBlockEntity extends RandomizableContainerBlockEntity {
 
     protected void applyImplicitComponents(DataComponentInput input) {
         super.applyImplicitComponents(input);
-        Integer lid = input.get(BPDataAttachments.LID_COLOR.get());
-        Integer base = input.get(BPDataAttachments.BASE_COLOR.get());
+        Integer lid = input.get(BPDataComponents.LID_COLOR.get());
+        Integer base = input.get(BPDataComponents.BASE_COLOR.get());
         this.baseColor = base != null ? base : 0;
         this.lidColor = lid != null ? lid : 0;
     }
 
     protected void collectImplicitComponents(DataComponentMap.Builder components) {
         super.collectImplicitComponents(components);
-        if (baseColor != 0) components.set(BPDataAttachments.BASE_COLOR.get(), baseColor);
-        if (lidColor != 0) components.set(BPDataAttachments.LID_COLOR.get(), lidColor);
+        if (baseColor != 0) components.set(BPDataComponents.BASE_COLOR.get(), baseColor);
+        if (lidColor != 0) components.set(BPDataComponents.LID_COLOR.get(), lidColor);
     }
 
     public void loadFromTag(CompoundTag tag, HolderLookup.Provider levelRegistry) {

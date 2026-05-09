@@ -3,7 +3,8 @@ package net.goulden.gouldensvanillabackpack.client.rendering;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.goulden.gouldensvanillabackpack.GouldensVanillaBackpack;
-import net.goulden.gouldensvanillabackpack.registry.BPDataAttachments;
+import net.goulden.gouldensvanillabackpack.registry.BPAttachments;
+import net.goulden.gouldensvanillabackpack.registry.BPDataComponents;
 import net.goulden.gouldensvanillabackpack.registry.BPItems;
 import net.goulden.gouldensvanillabackpack.registry.BPLayers;
 import net.minecraft.client.model.HumanoidModel;
@@ -23,8 +24,8 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-import static net.goulden.gouldensvanillabackpack.registry.BPDataAttachments.OPEN_COUNT;
-import static net.goulden.gouldensvanillabackpack.registry.BPDataAttachments.OPEN_TICKS;
+import static net.goulden.gouldensvanillabackpack.registry.BPAttachments.OPEN_COUNT;
+import static net.goulden.gouldensvanillabackpack.registry.BPAttachments.OPEN_TICKS;
 
 @OnlyIn(Dist.CLIENT)
 public class BackpackLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends RenderLayer<T, M> {
@@ -45,10 +46,10 @@ public class BackpackLayer<T extends LivingEntity, M extends HumanoidModel<T>> e
     public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight, T livingEntity,
                        float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float headYaw, float headPitch) {
 
-        ItemStack itemStack = livingEntity.getData(BPDataAttachments.BACKPACK_SLOT);
+        ItemStack itemStack = livingEntity.getData(BPAttachments.BACKPACK_SLOT);
         if (itemStack.getItem() != BPItems.BACKPACK.asItem()) return;
-        Integer lidColor = itemStack.get(BPDataAttachments.LID_COLOR.get());
-        Integer baseColor = itemStack.get(BPDataAttachments.BASE_COLOR.get());
+        Integer lidColor = itemStack.get(BPDataComponents.LID_COLOR.get());
+        Integer baseColor = itemStack.get(BPDataComponents.BASE_COLOR.get());
         if (lidColor == null && baseColor == null) return;
 
         poseStack.pushPose();

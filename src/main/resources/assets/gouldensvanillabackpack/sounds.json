@@ -8,6 +8,15 @@
       }
     ]
   },
+  "block.backpack.equip" : {
+    "sounds" : [
+      {
+        "name" : "item.armor.equip_wolf",
+        "pitch": 1.1,
+        "type": "event"
+      }
+    ]
+  },
   "block.backpack.open" : {
     "sounds" : [
       {
@@ -22,15 +31,6 @@
       {
         "name" : "item.bundle.insert",
         "pitch": 0.7,
-        "type": "event"
-      }
-    ]
-  },
-  "item.backpack.equip" : {
-    "sounds" : [
-      {
-        "name" : "item.armor.equip_wolf",
-        "pitch": 1.1,
         "type": "event"
       }
     ]
