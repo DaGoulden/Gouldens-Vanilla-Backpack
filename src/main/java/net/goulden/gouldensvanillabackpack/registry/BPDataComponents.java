@@ -21,4 +21,7 @@ public class BPDataComponents {
             "base_color", () -> DataComponentType.<Integer>builder().persistent(Codec.INT).networkSynchronized(ByteBufCodecs.INT).build()
     );
 
+    public static final Supplier<DataComponentType<Boolean>> REINFORCED = COMPONENTS.register(
+            "reinforced", () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build()
+    );
 }

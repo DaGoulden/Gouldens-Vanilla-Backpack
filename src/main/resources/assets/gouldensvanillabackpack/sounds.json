@@ -34,5 +34,25 @@
         "type": "event"
       }
     ]
+  },
+  "block.backpack.dye" : {
+    "sounds" : [
+      {
+        "name" : "item.dye.use",
+        "volume": 0.8,
+        "pitch": 0.6,
+        "type": "event"
+      }
+    ]
+  },
+  "block.backpack.reinforce" : {
+    "sounds" : [
+      {
+        "name" : "block.smithing_table.use",
+        "volume": 0.4,
+        "pitch": 0.9,
+        "type": "event"
+      }
+    ]
   }
 }

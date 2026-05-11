@@ -25,26 +25,27 @@ import net.minecraft.world.level.gameevent.GameEvent;
 
 public class BackpackBlockEntity extends RandomizableContainerBlockEntity {
     private NonNullList<ItemStack> itemStacks;
-    public int openTicks;
-    public boolean newlyPlaced;
     public int placeTicks;
-    public int floatTicks;
     public boolean open;
     private int openCount;
+    public int openTicks;
+    public int floatTicks;
     private int baseColor;
     private int lidColor;
+    private boolean reinforced = false;
 
     public BackpackBlockEntity(BlockPos pos, BlockState blockState) {
         super(BPBlockEntities.BACKPACK.get(), pos, blockState);
         this.itemStacks = NonNullList.withSize(27, ItemStack.EMPTY);
-        this.newlyPlaced = true;
     }
 
     public int getBaseColor() { return baseColor; }
     public int getLidColor() { return lidColor; }
+    public boolean isReinforced() { return reinforced; }
 
     public void setBaseColor(int color) { this.baseColor = color; setChanged(); }
     public void setLidColor(int color) { this.lidColor = color; setChanged(); }
+    public void setReinforced(boolean reinforced) { this.reinforced = reinforced; setChanged(); }
 
     public boolean triggerEvent(int id, int type) {
         if (id == 1) {
@@ -63,8 +64,7 @@ public class BackpackBlockEntity extends RandomizableContainerBlockEntity {
         if (blockEntity.open && blockEntity.openTicks < 10) { ++blockEntity.openTicks; }
         if (!blockEntity.open && blockEntity.openTicks > 0) { --blockEntity.openTicks; }
 
-        if (blockEntity.newlyPlaced && blockEntity.placeTicks < 20) { ++blockEntity.placeTicks; }
-        if (blockEntity.placeTicks == 20) { blockEntity.newlyPlaced = false; }
+        if (blockEntity.placeTicks < 20) { ++blockEntity.placeTicks; }
 
         if (blockEntity.floatTicks < 90) { ++blockEntity.floatTicks; }
         if (blockEntity.floatTicks == 90) { blockEntity.floatTicks = 0; }
@@ -128,7 +128,19 @@ public class BackpackBlockEntity extends RandomizableContainerBlockEntity {
         tag.putInt("FloatTicks", this.floatTicks);
         tag.putInt("BaseColor", this.baseColor);
         tag.putInt("LidColor", this.lidColor);
+        tag.putBoolean("Reinforced", this.reinforced);
         setChanged();
+    }
+
+    public void loadFromTag(CompoundTag tag, HolderLookup.Provider levelRegistry) {
+        this.itemStacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+        if (!this.tryLoadLootTable(tag) && tag.contains("Items", 9)) {
+            ContainerHelper.loadAllItems(tag, this.itemStacks, levelRegistry);
+        }
+        this.floatTicks = tag.getInt("FloatTicks");
+        this.baseColor = tag.getInt("BaseColor");
+        this.lidColor = tag.getInt("LidColor");
+        this.reinforced = tag.getBoolean("Reinforced");
     }
 
     @Override
@@ -141,26 +153,19 @@ public class BackpackBlockEntity extends RandomizableContainerBlockEntity {
 
     protected void applyImplicitComponents(DataComponentInput input) {
         super.applyImplicitComponents(input);
-        Integer lid = input.get(BPDataComponents.LID_COLOR.get());
         Integer base = input.get(BPDataComponents.BASE_COLOR.get());
         this.baseColor = base != null ? base : 0;
+        Integer lid = input.get(BPDataComponents.LID_COLOR.get());
         this.lidColor = lid != null ? lid : 0;
+        Boolean reinforced = input.get(BPDataComponents.REINFORCED.get());
+        this.reinforced = reinforced != null && reinforced;
     }
 
     protected void collectImplicitComponents(DataComponentMap.Builder components) {
         super.collectImplicitComponents(components);
         if (baseColor != 0) components.set(BPDataComponents.BASE_COLOR.get(), baseColor);
         if (lidColor != 0) components.set(BPDataComponents.LID_COLOR.get(), lidColor);
-    }
-
-    public void loadFromTag(CompoundTag tag, HolderLookup.Provider levelRegistry) {
-        this.itemStacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        if (!this.tryLoadLootTable(tag) && tag.contains("Items", 9)) {
-            ContainerHelper.loadAllItems(tag, this.itemStacks, levelRegistry);
-        }
-        this.floatTicks = tag.getInt("FloatTicks");
-        this.baseColor = tag.getInt("BaseColor");
-        this.lidColor = tag.getInt("LidColor");
+        if (reinforced) components.set(BPDataComponents.REINFORCED.get(), true);
     }
 
     public int getContainerSize() {

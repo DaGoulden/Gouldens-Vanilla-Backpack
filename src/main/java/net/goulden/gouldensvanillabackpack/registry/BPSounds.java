@@ -13,4 +13,6 @@ public class BPSounds {
     public static final Holder<SoundEvent> BACKPACK_EQUIP = SOUND_EVENTS.register("block.backpack.equip", SoundEvent::createVariableRangeEvent);
     public static final Holder<SoundEvent> BACKPACK_OPEN = SOUND_EVENTS.register("block.backpack.open", SoundEvent::createVariableRangeEvent);
     public static final Holder<SoundEvent> BACKPACK_CLOSE = SOUND_EVENTS.register("block.backpack.close", SoundEvent::createVariableRangeEvent);
+    public static final Holder<SoundEvent> BACKPACK_DYE = SOUND_EVENTS.register("block.backpack.dye", SoundEvent::createVariableRangeEvent);
+    public static final Holder<SoundEvent> BACKPACK_REINFORCE = SOUND_EVENTS.register("block.backpack.reinforce", SoundEvent::createVariableRangeEvent);
 }

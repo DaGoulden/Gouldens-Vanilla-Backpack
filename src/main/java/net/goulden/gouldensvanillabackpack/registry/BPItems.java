@@ -11,6 +11,5 @@ public class BPItems {
 
     public static final DeferredItem<BackpackItem> BACKPACK = ITEMS.register("backpack",
             () -> new BackpackItem(BPBlocks.BACKPACK.get(), new Item.Properties()
-                    .stacksTo(1)
-                    .fireResistant()));
+                    .stacksTo(1)));
 }

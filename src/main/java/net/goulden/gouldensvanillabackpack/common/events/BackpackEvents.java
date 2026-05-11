@@ -1,7 +1,6 @@
 package net.goulden.gouldensvanillabackpack.common.events;
 
 import net.goulden.gouldensvanillabackpack.GouldensVanillaBackpack;
-import net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlock;
 import net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlockEntity;
 import net.goulden.gouldensvanillabackpack.networking.BackpackEquipPayload;
 import net.goulden.gouldensvanillabackpack.registry.BPBlocks;
@@ -16,7 +15,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
@@ -25,6 +23,7 @@ import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.event.level.ExplosionEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import static net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlock.FACING;
@@ -41,7 +40,6 @@ public class BackpackEvents {
         if (!player.isCrouching()) return;
         Level level = event.getLevel();
         BlockPos blockPos = event.getPos();
-        BlockState blockState = level.getBlockState(blockPos);
         ItemStack equippedBackpackSlot = player.getData(BPAttachments.BACKPACK_SLOT);
         BlockEntity blockEntity = level.getBlockEntity(blockPos);
         boolean hasBackpack = !equippedBackpackSlot.isEmpty();
@@ -93,31 +91,10 @@ public class BackpackEvents {
                     event.setCanceled(true);
                 }
             }
-
-        } else {
-
-            // DYE BACKPACK
-            if ((blockEntity instanceof BackpackBlockEntity be) && (event.getItemStack().getItem() instanceof DyeItem dyeItem)) {
-
-                if (!level.isClientSide) {
-                    int color = dyeItem.getDyeColor().getTextureDiffuseColor();
-                    double hitY = event.getHitVec().getLocation().y - blockPos.getY();
-                    boolean isFloating = level.getBlockState(blockPos).getValue(BackpackBlock.FLOATING);
-                    if (hitY > (isFloating ? 0.35 : 0.5)) {
-                        be.setLidColor(color);
-                    } else {
-                        be.setBaseColor(color);
-                    }
-                    level.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS);
-                    if (!player.isCreative()) event.getItemStack().shrink(1);
-                }
-                event.setCanceled(true);
-            }
         }
     }
 
     private static void addParticles(Level level, BlockPos pos) {
-        if (level.isClientSide) return;
         ServerLevel serverLevel = (ServerLevel) level;
         for (int i = 0; i < 4; i++) {
             serverLevel.sendParticles(
@@ -128,5 +105,14 @@ public class BackpackEvents {
                     0
             );
         }
+    }
+
+    @SubscribeEvent
+    public static void onExplosionDetonate(ExplosionEvent.Detonate event) {
+        if (event.getLevel().isClientSide) return;
+        event.getAffectedBlocks().removeIf(pos -> {
+            BlockEntity be = event.getLevel().getBlockEntity(pos);
+            return be instanceof BackpackBlockEntity backpackBE && backpackBE.isReinforced();
+        });
     }
 }

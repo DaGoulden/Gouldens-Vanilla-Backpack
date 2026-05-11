@@ -61,11 +61,11 @@ public class BackpackBlockRenderer implements BlockEntityRenderer<BackpackBlockE
             lidRot = (float) -Math.pow(2, t - 10) * Mth.sin((t - 10.75F) * 0.7F);
         }
 
-        if (blockEntity.placeTicks <= 3 && blockEntity.newlyPlaced) {
+        if (blockEntity.placeTicks <= 3) {
             float t = (blockEntity.placeTicks + partialTick) / 4;
             basePosY = t * t * 4 + 20;
         }
-        if (blockEntity.placeTicks <= 7 && blockEntity.newlyPlaced) {
+        if (blockEntity.placeTicks <= 7) {
             float t = (blockEntity.placeTicks + partialTick) / 8;
             baseRotX = Mth.sin(t * 10) * 0.1F * (1 - t);
             baseRotZ = Mth.cos(t * 10) * 0.1F * (1 - t);
