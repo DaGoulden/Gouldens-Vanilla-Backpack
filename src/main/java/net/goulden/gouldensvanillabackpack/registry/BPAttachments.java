@@ -17,8 +17,8 @@ public class BPAttachments {
             "backpack_slot", () -> AttachmentType.builder(() -> ItemStack.EMPTY).serialize(ItemStack.OPTIONAL_CODEC).build()
     );
 
-    public static final Supplier<AttachmentType<Integer>> OPEN_COUNT = ATTACHMENT_TYPES.register(
-            "open_count", () -> AttachmentType.builder(() -> 0).serialize(Codec.INT).build()
+    public static final Supplier<AttachmentType<Boolean>> IS_OPEN = ATTACHMENT_TYPES.register(
+            "is_open", () -> AttachmentType.builder(() -> false).serialize(Codec.BOOL).build()
     );
 
     public static final Supplier<AttachmentType<Integer>> OPEN_TICKS = ATTACHMENT_TYPES.register(

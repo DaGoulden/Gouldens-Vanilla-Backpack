@@ -28,6 +28,7 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import static net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlock.FACING;
 import static net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlock.WATERLOGGED;
+import static net.goulden.gouldensvanillabackpack.registry.BPAttachments.BACKPACK_SLOT;
 
 @EventBusSubscriber(modid = GouldensVanillaBackpack.MODID)
 public class BackpackEvents {
@@ -40,7 +41,7 @@ public class BackpackEvents {
         if (!player.isCrouching()) return;
         Level level = event.getLevel();
         BlockPos blockPos = event.getPos();
-        ItemStack equippedBackpackSlot = player.getData(BPAttachments.BACKPACK_SLOT);
+        ItemStack equippedBackpackSlot = player.getData(BACKPACK_SLOT);
         BlockEntity blockEntity = level.getBlockEntity(blockPos);
         boolean hasBackpack = !equippedBackpackSlot.isEmpty();
 
@@ -52,7 +53,7 @@ public class BackpackEvents {
                 if (!level.isClientSide) {
                     ItemStack itemStack = new ItemStack(BPBlocks.BACKPACK);
                     itemStack.applyComponents(blockEntity.collectComponents());
-                    player.setData(BPAttachments.BACKPACK_SLOT, itemStack);
+                    player.setData(BACKPACK_SLOT, itemStack);
                     PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new BackpackEquipPayload(player.getId(), itemStack));
                     level.removeBlockEntity(blockPos);
                     level.removeBlock(blockPos, false);
@@ -80,7 +81,7 @@ public class BackpackEvents {
                                 .setValue(WATERLOGGED, level.getFluidState(placePos).getType() == Fluids.WATER);
                         blockEntity = new BackpackBlockEntity(placePos, state);
                         blockEntity.applyComponentsFromItemStack(equippedBackpackSlot);
-                        player.setData(BPAttachments.BACKPACK_SLOT, ItemStack.EMPTY);
+                        player.setData(BACKPACK_SLOT, ItemStack.EMPTY);
                         PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new BackpackEquipPayload(player.getId(), ItemStack.EMPTY));
                         level.setBlockAndUpdate(placePos, state);
                         level.setBlockEntity(blockEntity);

@@ -29,6 +29,8 @@ import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.Objects;
 
+import static net.goulden.gouldensvanillabackpack.registry.BPAttachments.BACKPACK_SLOT;
+
 @EventBusSubscriber(modid = GouldensVanillaBackpack.MODID)
 public class BackpackOnDeathDropEvents {
 
@@ -37,10 +39,10 @@ public class BackpackOnDeathDropEvents {
     public static void onPlayerDeath(LivingDeathEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
 
-        ItemStack equipped = player.getData(BPAttachments.BACKPACK_SLOT);
+        ItemStack equipped = player.getData(BACKPACK_SLOT);
         if (equipped.isEmpty()) return;
 
-        player.setData(BPAttachments.BACKPACK_SLOT, ItemStack.EMPTY);
+        player.setData(BACKPACK_SLOT, ItemStack.EMPTY);
         PacketDistributor.sendToPlayersTrackingEntityAndSelf(player,
                 new BackpackEquipPayload(player.getId(), ItemStack.EMPTY));
 
@@ -66,7 +68,6 @@ public class BackpackOnDeathDropEvents {
         boolean onFluidSurface = inFluid && level.getFluidState(itemEntity.blockPosition().above()).isEmpty();
         boolean onGround = itemEntity.onGround() && !inFluid;
 
-        // Flotar más rápido en cualquier fluido
         if (inFluid) {
             Vec3 velocity = itemEntity.getDeltaMovement();
             itemEntity.setDeltaMovement(velocity.x, velocity.y + 0.01, velocity.z);
@@ -102,11 +103,11 @@ public class BackpackOnDeathDropEvents {
         if (!hasContainer || isEmpty) return;
 
         Player player = event.getPlayer();
-        ItemStack equipped = player.getData(BPAttachments.BACKPACK_SLOT);
+        ItemStack equipped = player.getData(BACKPACK_SLOT);
         if (!equipped.isEmpty()) return;
 
         if (!event.getItemEntity().hasPickUpDelay() && !player.level().isClientSide()) {
-            player.setData(BPAttachments.BACKPACK_SLOT, stack.copy());
+            player.setData(BACKPACK_SLOT, stack.copy());
             PacketDistributor.sendToPlayersTrackingEntityAndSelf(player,
                     new BackpackEquipPayload(player.getId(), stack.copy()));
             player.take(event.getItemEntity(), 1);

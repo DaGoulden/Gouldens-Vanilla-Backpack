@@ -24,9 +24,6 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-import static net.goulden.gouldensvanillabackpack.registry.BPAttachments.OPEN_COUNT;
-import static net.goulden.gouldensvanillabackpack.registry.BPAttachments.OPEN_TICKS;
-
 @OnlyIn(Dist.CLIENT)
 public class BackpackLayer<T extends LivingEntity, M extends HumanoidModel<T>> extends RenderLayer<T, M> {
 
@@ -56,8 +53,8 @@ public class BackpackLayer<T extends LivingEntity, M extends HumanoidModel<T>> e
 
         // LID ANIMATION
         float lidRot = 0;
-        boolean isOpen = livingEntity.getData(OPEN_COUNT) > 0;
-        int openTicks = livingEntity.getData(OPEN_TICKS);
+        boolean isOpen = livingEntity.getData(BPAttachments.IS_OPEN);
+        int openTicks = livingEntity.getData(BPAttachments.OPEN_TICKS);
         if (isOpen && openTicks < 10) {
             float t = openTicks + partialTicks;
             lidRot = (float) Math.pow(2, -1 * t) * Mth.sin((t - 0.75F) * 0.5F) + 1;

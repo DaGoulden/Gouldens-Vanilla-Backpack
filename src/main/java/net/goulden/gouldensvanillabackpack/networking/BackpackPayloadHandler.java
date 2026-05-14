@@ -1,10 +1,11 @@
 package net.goulden.gouldensvanillabackpack.networking;
 
 import net.goulden.gouldensvanillabackpack.common.entity.BackpackWearer;
-import net.goulden.gouldensvanillabackpack.registry.BPAttachments;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
+
+import static net.goulden.gouldensvanillabackpack.registry.BPAttachments.BACKPACK_SLOT;
 
 public class BackpackPayloadHandler {
 
@@ -12,7 +13,7 @@ public class BackpackPayloadHandler {
         context.enqueueWork(() -> {
             Entity entity = context.player().level().getEntity(payload.entityId());
             if (entity instanceof Player player) {
-                player.setData(BPAttachments.BACKPACK_SLOT, payload.stack());
+                player.setData(BACKPACK_SLOT, payload.stack());
             }
         });
     }
@@ -26,7 +27,6 @@ public class BackpackPayloadHandler {
                 } else {
                     backpackWearer.onBackpackClose();
                 }
-
             }
         });
     }
