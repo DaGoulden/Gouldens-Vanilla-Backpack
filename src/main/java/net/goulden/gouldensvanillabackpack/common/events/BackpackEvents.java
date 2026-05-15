@@ -1,6 +1,7 @@
 package net.goulden.gouldensvanillabackpack.common.events;
 
 import net.goulden.gouldensvanillabackpack.GouldensVanillaBackpack;
+import net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlock;
 import net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlockEntity;
 import net.goulden.gouldensvanillabackpack.networking.BackpackEquipPayload;
 import net.goulden.gouldensvanillabackpack.registry.BPBlocks;
@@ -17,7 +18,9 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -26,8 +29,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.ExplosionEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-import static net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlock.FACING;
-import static net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlock.WATERLOGGED;
+import static net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlock.*;
 import static net.goulden.gouldensvanillabackpack.registry.BPAttachments.BACKPACK_SLOT;
 
 @EventBusSubscriber(modid = GouldensVanillaBackpack.MODID)
@@ -58,7 +60,7 @@ public class BackpackEvents {
                     level.removeBlockEntity(blockPos);
                     level.removeBlock(blockPos, false);
                     level.playSound(null, blockPos.above(), BPSounds.BACKPACK_EQUIP.value(), SoundSource.BLOCKS);
-                    addParticles(level, blockPos);
+                    addParticles(level, blockPos, blockEntity);
                 } else {
                     player.swing(InteractionHand.MAIN_HAND);
                 }
@@ -95,16 +97,28 @@ public class BackpackEvents {
         }
     }
 
-    private static void addParticles(Level level, BlockPos pos) {
+    private static void addParticles(Level level, BlockPos pos, BlockEntity blockEntity) {
         ServerLevel serverLevel = (ServerLevel) level;
-        for (int i = 0; i < 4; i++) {
-            serverLevel.sendParticles(
-                    ParticleTypes.DUST_PLUME,
-                    pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5,
-                    1,
-                    0, 0, 0,
-                    0
-            );
+        boolean floating = blockEntity.getBlockState().getValue(FLOATING);
+        Direction facing = blockEntity.getBlockState().getValue(FACING);
+        boolean facingZAxis = facing == Direction.NORTH || facing == Direction.SOUTH;
+        for (int i = -1; i <= 1; ++i) {
+            for (int j = -1; j <= 1; ++j) {
+                for (int k = -1; k <= 1; ++k) {
+                    serverLevel.sendParticles(
+                            new DustParticleOptions(
+                                    Vec3.fromRGB24(0xCCCCCC).toVector3f(),
+                                    0.6F
+                            ),
+                            pos.getX() + 0.5 + ((facingZAxis ? 0.3125 : 0.25) * i),
+                            pos.getY() + (floating ? 0.15 : 0.375) + (0.375 * j),
+                            pos.getZ() + 0.5 + ((facingZAxis ? 0.25 : 0.3125) * k),
+                            1,
+                            0, 0, 0,
+                            0
+                    );
+                }
+            }
         }
     }
 

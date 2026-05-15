@@ -66,14 +66,13 @@
     ]
   },
   "block.backpack.unlock" : {
-  "sounds" : [
-    {
-      "name" : "entity.sheep.shear",
-      "volume": 0.6,
-      "pitch": 1.1,
-      "type": "event"
-    }
-  ]
-}
-
+    "sounds" : [
+      {
+        "name" : "entity.sheep.shear",
+        "volume": 0.6,
+        "pitch": 1.1,
+        "type": "event"
+      }
+    ]
+  }
 }
