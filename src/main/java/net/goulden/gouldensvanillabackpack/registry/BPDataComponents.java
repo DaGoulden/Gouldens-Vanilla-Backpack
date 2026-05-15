@@ -24,4 +24,8 @@ public class BPDataComponents {
     public static final Supplier<DataComponentType<Boolean>> REINFORCED = COMPONENTS.register(
             "reinforced", () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build()
     );
+
+    public static final Supplier<DataComponentType<Boolean>> LOCKED = COMPONENTS.register(
+            "locked", () -> DataComponentType.<Boolean>builder().persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL).build()
+    );
 }

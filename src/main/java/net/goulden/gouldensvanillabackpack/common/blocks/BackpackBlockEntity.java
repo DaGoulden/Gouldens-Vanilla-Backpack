@@ -33,6 +33,7 @@ public class BackpackBlockEntity extends RandomizableContainerBlockEntity {
     private int baseColor;
     private int lidColor;
     private boolean reinforced = false;
+    private boolean locked = false;
 
     public BackpackBlockEntity(BlockPos pos, BlockState blockState) {
         super(BPBlockEntities.BACKPACK.get(), pos, blockState);
@@ -42,10 +43,12 @@ public class BackpackBlockEntity extends RandomizableContainerBlockEntity {
     public int getBaseColor() { return baseColor; }
     public int getLidColor() { return lidColor; }
     public boolean isReinforced() { return reinforced; }
+    public boolean isLocked() { return locked; }
 
     public void setBaseColor(int color) { this.baseColor = color; setChanged(); }
     public void setLidColor(int color) { this.lidColor = color; setChanged(); }
     public void setReinforced(boolean reinforced) { this.reinforced = reinforced; setChanged(); }
+    public void setLocked(boolean locked) { this.locked = locked; setChanged(); }
 
     public boolean triggerEvent(int id, int type) {
         if (id == 1) {
@@ -129,6 +132,7 @@ public class BackpackBlockEntity extends RandomizableContainerBlockEntity {
         tag.putInt("BaseColor", this.baseColor);
         tag.putInt("LidColor", this.lidColor);
         tag.putBoolean("Reinforced", this.reinforced);
+        tag.putBoolean("Locked", this.locked);
         setChanged();
     }
 
@@ -141,6 +145,7 @@ public class BackpackBlockEntity extends RandomizableContainerBlockEntity {
         this.baseColor = tag.getInt("BaseColor");
         this.lidColor = tag.getInt("LidColor");
         this.reinforced = tag.getBoolean("Reinforced");
+        this.locked = tag.getBoolean("Locked");
     }
 
     @Override
@@ -159,6 +164,8 @@ public class BackpackBlockEntity extends RandomizableContainerBlockEntity {
         this.lidColor = lid != null ? lid : 0;
         Boolean reinforced = input.get(BPDataComponents.REINFORCED.get());
         this.reinforced = reinforced != null && reinforced;
+        Boolean locked = input.get(BPDataComponents.LOCKED.get());
+        this.locked = locked != null && locked;
     }
 
     protected void collectImplicitComponents(DataComponentMap.Builder components) {
@@ -166,6 +173,7 @@ public class BackpackBlockEntity extends RandomizableContainerBlockEntity {
         if (baseColor != 0) components.set(BPDataComponents.BASE_COLOR.get(), baseColor);
         if (lidColor != 0) components.set(BPDataComponents.LID_COLOR.get(), lidColor);
         if (reinforced) components.set(BPDataComponents.REINFORCED.get(), true);
+        if (locked) components.set(BPDataComponents.LOCKED.get(), true);
     }
 
     public int getContainerSize() {

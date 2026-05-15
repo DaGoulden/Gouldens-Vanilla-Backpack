@@ -3,6 +3,7 @@ package net.goulden.gouldensvanillabackpack.common.events;
 import net.goulden.gouldensvanillabackpack.GouldensVanillaBackpack;
 import net.goulden.gouldensvanillabackpack.networking.BackpackOpenPayload;
 import net.goulden.gouldensvanillabackpack.registry.BPAttachments;
+import net.goulden.gouldensvanillabackpack.registry.BPDataComponents;
 import net.goulden.gouldensvanillabackpack.registry.BPItems;
 import net.goulden.gouldensvanillabackpack.registry.BPSounds;
 import net.minecraft.core.NonNullList;
@@ -43,6 +44,7 @@ public class EntityInteractionEvents {
         if (!(event.getTarget() instanceof LivingEntity target)) return;
         ItemStack item = target.getData(BPAttachments.BACKPACK_SLOT);
         if (!item.is(BPItems.BACKPACK)) return;
+        if (Boolean.TRUE.equals(item.get(BPDataComponents.LOCKED.get()))) return;
         if (!isBehind(player, target) || player.distanceTo(target) > 3.0F) return;
 
         if (!player.level().isClientSide()) {

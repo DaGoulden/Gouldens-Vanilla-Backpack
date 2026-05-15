@@ -9,8 +9,10 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -35,7 +37,7 @@ public class BackpackUpgradeEvents {
         BlockState blockState = level.getBlockState(blockPos);
         BlockEntity blockEntity = level.getBlockEntity(blockPos);
 
-        if (blockEntity instanceof BackpackBlockEntity be) {
+        if (blockEntity instanceof BackpackBlockEntity backpackBlockEntity) {
 
             // DYE BACKPACK
             if (event.getItemStack().getItem() instanceof DyeItem dyeItem) {
@@ -44,9 +46,9 @@ public class BackpackUpgradeEvents {
                     double hitY = event.getHitVec().getLocation().y - blockPos.getY();
                     boolean isFloating = level.getBlockState(blockPos).getValue(BackpackBlock.FLOATING);
                     if (hitY > (isFloating ? 0.35 : 0.5)) {
-                        be.setLidColor(color);
+                        backpackBlockEntity.setLidColor(color);
                     } else {
-                        be.setBaseColor(color);
+                        backpackBlockEntity.setBaseColor(color);
                     }
                     level.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS);
                     if (!player.isCreative()) event.getItemStack().shrink(1);
@@ -58,12 +60,40 @@ public class BackpackUpgradeEvents {
             }
 
             // REINFORCE BACKPACK
-            if (event.getItemStack().is(Items.NETHERITE_SCRAP) && !be.isReinforced()) {
+            if (event.getItemStack().is(Items.NETHERITE_SCRAP) && !backpackBlockEntity.isReinforced()) {
                 if (!level.isClientSide) {
-                    be.setReinforced(true);
+                    backpackBlockEntity.setReinforced(true);
                     level.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS);
                     if (!player.isCreative()) event.getItemStack().shrink(1);
                     level.playSound(null, blockPos, BPSounds.BACKPACK_REINFORCE.value(), SoundSource.BLOCKS);
+                } else {
+                    player.swing(InteractionHand.MAIN_HAND);
+                }
+                event.setCanceled(true);
+            }
+
+            // LOCK BACKPACK
+            if (event.getItemStack().is(Items.TRIAL_KEY) && !backpackBlockEntity.isLocked()) {
+                if (!level.isClientSide) {
+                    backpackBlockEntity.setLocked(true);
+                    level.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS);
+                    if (!player.isCreative()) event.getItemStack().shrink(1);
+                    level.playSound(null, blockPos, BPSounds.BACKPACK_LOCK.value(), SoundSource.BLOCKS);
+                } else {
+                    player.swing(InteractionHand.MAIN_HAND);
+                }
+                event.setCanceled(true);
+            }
+
+            // UNLOCK BACKPACK
+            if (event.getItemStack().is(Items.SHEARS) && backpackBlockEntity.isLocked()) {
+                if (!level.isClientSide) {
+                    backpackBlockEntity.setLocked(false);
+                    level.sendBlockUpdated(blockPos, blockState, blockState, Block.UPDATE_CLIENTS);
+                    level.addFreshEntity(new ItemEntity(level, blockPos.getX() + 0.5, blockPos.getY() + 0.8, blockPos.getZ() + 0.5,
+                            new ItemStack(Items.TRIAL_KEY)
+                    ));
+                    level.playSound(null, blockPos, BPSounds.BACKPACK_UNLOCK.value(), SoundSource.BLOCKS);
                 } else {
                     player.swing(InteractionHand.MAIN_HAND);
                 }

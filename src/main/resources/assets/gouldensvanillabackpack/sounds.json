@@ -54,5 +54,26 @@
         "type": "event"
       }
     ]
-  }
+  },
+  "block.backpack.lock" : {
+    "sounds" : [
+      {
+        "name" : "block.vault.insert_item",
+        "volume": 0.8,
+        "pitch": 1.2,
+        "type": "event"
+      }
+    ]
+  },
+  "block.backpack.unlock" : {
+  "sounds" : [
+    {
+      "name" : "entity.sheep.shear",
+      "volume": 0.6,
+      "pitch": 1.1,
+      "type": "event"
+    }
+  ]
+}
+
 }
