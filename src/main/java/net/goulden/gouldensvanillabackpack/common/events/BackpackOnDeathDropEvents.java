@@ -16,6 +16,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -23,7 +24,9 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDropsEvent;
 import net.neoforged.neoforge.event.entity.player.ItemEntityPickupEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 
@@ -34,22 +37,28 @@ import static net.goulden.gouldensvanillabackpack.registry.BPAttachments.BACKPAC
 @EventBusSubscriber(modid = GouldensVanillaBackpack.MODID)
 public class BackpackOnDeathDropEvents {
 
-    // Al morir: limpiar attachment y dropear como ítem
     @SubscribeEvent
     public static void onPlayerDeath(LivingDeathEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
-
         ItemStack equipped = player.getData(BACKPACK_SLOT);
         if (equipped.isEmpty()) return;
+        if (player.level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) return;
 
         player.setData(BACKPACK_SLOT, ItemStack.EMPTY);
-        PacketDistributor.sendToPlayersTrackingEntityAndSelf(player,
-                new BackpackEquipPayload(player.getId(), ItemStack.EMPTY));
-
+        PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new BackpackEquipPayload(player.getId(), ItemStack.EMPTY));
         player.drop(equipped, false);
     }
 
-    // Cada tick: si el ítem de mochila toca el suelo o flota en un fluido → convertir en bloque
+    @SubscribeEvent
+    public static void onPlayerClone(PlayerEvent.Clone event) {
+        if (!event.isWasDeath()) return;
+
+        if (event.getEntity().level().getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY)) {
+            ItemStack backpack = event.getOriginal().getData(BPAttachments.BACKPACK_SLOT);
+            event.getEntity().setData(BPAttachments.BACKPACK_SLOT, backpack);
+        }
+    }
+
     @SubscribeEvent
     public static void onItemEntityTick(EntityTickEvent.Post event) {
         if (!(event.getEntity() instanceof ItemEntity itemEntity)) return;
@@ -90,7 +99,6 @@ public class BackpackOnDeathDropEvents {
         itemEntity.discard();
     }
 
-    // Auto-equipar al recoger
     @SubscribeEvent
     public static void onItemEntityPickup(ItemEntityPickupEvent.Pre event) {
         ItemStack stack = event.getItemEntity().getItem();
@@ -99,7 +107,6 @@ public class BackpackOnDeathDropEvents {
         boolean hasContainer = stack.has(DataComponents.CONTAINER);
         boolean isEmpty = Objects.equals(stack.get(DataComponents.CONTAINER), ItemContainerContents.EMPTY);
 
-        // Sin contenido → agarrar normalmente
         if (!hasContainer || isEmpty) return;
 
         Player player = event.getPlayer();
@@ -108,8 +115,7 @@ public class BackpackOnDeathDropEvents {
 
         if (!event.getItemEntity().hasPickUpDelay() && !player.level().isClientSide()) {
             player.setData(BACKPACK_SLOT, stack.copy());
-            PacketDistributor.sendToPlayersTrackingEntityAndSelf(player,
-                    new BackpackEquipPayload(player.getId(), stack.copy()));
+            PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new BackpackEquipPayload(player.getId(), stack.copy()));
             player.take(event.getItemEntity(), 1);
             event.getItemEntity().discard();
             player.awardStat(Stats.ITEM_PICKED_UP.get(stack.getItem()), 1);

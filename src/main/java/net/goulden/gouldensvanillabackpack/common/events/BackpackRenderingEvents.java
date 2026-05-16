@@ -16,10 +16,10 @@ public class BackpackRenderingEvents {
 
     @SubscribeEvent
     public static void onStartTracking(PlayerEvent.StartTracking event) {
-        if (event.getTarget() instanceof Player trackedPlayer) {
-            ItemStack equipped = trackedPlayer.getData(BPAttachments.BACKPACK_SLOT);
+        if (event.getTarget() instanceof Player targetPlayer) {
+            ItemStack equipped = targetPlayer.getData(BPAttachments.BACKPACK_SLOT);
             if (!equipped.isEmpty()) {
-                PacketDistributor.sendToPlayer((ServerPlayer) event.getEntity(), new BackpackEquipPayload(trackedPlayer.getId(), equipped));
+                PacketDistributor.sendToPlayer((ServerPlayer) event.getEntity(), new BackpackEquipPayload(targetPlayer.getId(), equipped));
             }
         }
     }
@@ -37,6 +37,17 @@ public class BackpackRenderingEvents {
     @SubscribeEvent
     public static void onPlayerChangeDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
+            ItemStack equipped = player.getData(BPAttachments.BACKPACK_SLOT);
+            if (!equipped.isEmpty()) {
+                PacketDistributor.sendToPlayer(player, new BackpackEquipPayload(player.getId(), equipped));
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            if (event.isEndConquered()) return;
             ItemStack equipped = player.getData(BPAttachments.BACKPACK_SLOT);
             if (!equipped.isEmpty()) {
                 PacketDistributor.sendToPlayer(player, new BackpackEquipPayload(player.getId(), equipped));

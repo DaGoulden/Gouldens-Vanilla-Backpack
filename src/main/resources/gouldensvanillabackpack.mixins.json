@@ -2,6 +2,6 @@
   "required": true,
   "package": "net.goulden.gouldensvanillabackpack.mixins",
   "compatibilityLevel": "JAVA_21",
-  "mixins": ["LivingEntityMixin"],
+  "mixins": ["InventoryMixin","LivingEntityMixin"],
   "injectors": { "defaultRequire": 1 }
 }
