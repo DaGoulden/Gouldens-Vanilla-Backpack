@@ -25,6 +25,7 @@ public class GouldensVanillaBackpack {
         BPBlocks.BLOCKS.register(modEventBus);
         BPDataComponents.COMPONENTS.register(modEventBus);
         BPItems.ITEMS.register(modEventBus);
+        BPParticles.PARTICLES.register(modEventBus);
         BPRecipes.SERIALIZERS.register(modEventBus);
         BPSounds.SOUND_EVENTS.register(modEventBus);
     }

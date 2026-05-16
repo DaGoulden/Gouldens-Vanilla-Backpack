@@ -1,9 +1,11 @@
 package net.goulden.gouldensvanillabackpack.common.blocks;
 
 import com.mojang.serialization.MapCodec;
+import net.goulden.gouldensvanillabackpack.common.particles.BackpackBreakParticleOptions;
 import net.goulden.gouldensvanillabackpack.registry.BPBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -126,5 +128,28 @@ public class BackpackBlock extends BaseEntityBlock implements EntityBlock, Simpl
         SHAPE_Z = Block.box(4.0, 0.0, 3.0, 12.0, 12.5, 13.0);
         FLOATING_SHAPE_X = Block.box(3.0, -2.5, 4.0, 13.0, 8.5, 12.0);
         FLOATING_SHAPE_Z = Block.box(4.0, -2.5, 3.0, 12.0, 8.5, 13.0);
+    }
+
+    @Override
+    public void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state) {
+        level.playSound(null, pos, state.getSoundType().getBreakSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
+        if (level.getBlockEntity(pos) instanceof BackpackBlockEntity be) {
+            int baseColor = be.getBaseColor();
+            int lidColor = be.getLidColor();
+            for (int i = 0; i < 10; i++) {
+                double x = pos.getX() + level.random.nextDouble();
+                double y = pos.getY() + level.random.nextDouble();
+                double z = pos.getZ() + level.random.nextDouble();
+                double vx = (level.random.nextDouble() - 0.5) * 0.1;
+                double vy = level.random.nextDouble() * 0.1;
+                double vz = (level.random.nextDouble() - 0.5) * 0.1;
+                if (baseColor != 0)
+                    level.addParticle(new BackpackBreakParticleOptions(baseColor), x, y, z, vx, vy, vz);
+                if (lidColor != 0)
+                    level.addParticle(new BackpackBreakParticleOptions(lidColor), x, y, z, vx, vy, vz);
+            }
+        } else {
+            super.spawnDestroyParticles(level, player, pos, state);
+        }
     }
 }

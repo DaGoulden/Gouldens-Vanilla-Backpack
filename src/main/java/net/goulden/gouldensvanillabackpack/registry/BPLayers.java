@@ -2,6 +2,7 @@ package net.goulden.gouldensvanillabackpack.registry;
 
 import net.goulden.gouldensvanillabackpack.GouldensVanillaBackpack;
 import net.goulden.gouldensvanillabackpack.client.models.BackpackModel;
+import net.goulden.gouldensvanillabackpack.client.particles.BackpackBreakParticle;
 import net.goulden.gouldensvanillabackpack.client.rendering.BackpackBlockRenderer;
 import net.goulden.gouldensvanillabackpack.client.rendering.BackpackLayer;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -20,6 +21,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 
 @EventBusSubscriber(modid = GouldensVanillaBackpack.MODID, value = Dist.CLIENT)
 public class BPLayers {
@@ -64,9 +66,7 @@ public class BPLayers {
     @SubscribeEvent
     public static void addPlayerLayers(EntityRenderersEvent.AddLayers event) {
         for (PlayerSkin.Model skin : event.getSkins()) {
-
             if (event.getSkin(skin) instanceof PlayerRenderer playerRenderer) {
-
                 playerRenderer.addLayer(new BackpackLayer<>(playerRenderer, event.getEntityModels()));
             }
         }
@@ -84,5 +84,10 @@ public class BPLayers {
                 armorStandRenderer.addLayer(new BackpackLayer<>(armorStandRenderer, event.getEntityModels()));
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void onRegisterParticles(RegisterParticleProvidersEvent event) {
+        event.registerSpriteSet(BPParticles.BACKPACK_BREAK.get(), BackpackBreakParticle.Provider::new);
     }
 }
