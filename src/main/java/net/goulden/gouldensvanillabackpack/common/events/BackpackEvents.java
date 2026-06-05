@@ -110,9 +110,9 @@ public class BackpackEvents {
                                     Vec3.fromRGB24(0xCCCCCC).toVector3f(),
                                     0.6F
                             ),
-                            pos.getX() + 0.5 + ((facingZAxis ? 0.3125 : 0.25) * i),
-                            pos.getY() + (floating ? 0.15 : 0.375) + (0.375 * j),
-                            pos.getZ() + 0.5 + ((facingZAxis ? 0.25 : 0.3125) * k),
+                            pos.getX() + 0.5 + ((facingZAxis ? 0.25 : 0.1875) * i),
+                            pos.getY() + (floating ? 0.15625 : 0.34375) + (0.34375 * j),
+                            pos.getZ() + 0.5 + ((facingZAxis ? 0.1875 : 0.25) * k),
                             1,
                             0, 0, 0,
                             0

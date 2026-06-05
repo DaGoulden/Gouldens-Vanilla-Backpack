@@ -56,6 +56,14 @@ public class GouldensVanillaBackpack {
                 Integer color = stack.get(BPDataComponents.LID_COLOR.get());
                 yield color != null ? FastColor.ARGB32.opaque(color) : -1;
             }
+            case 2 -> {
+                Boolean reinforced = stack.get(BPDataComponents.REINFORCED.get());
+                yield (reinforced != null && reinforced) ? 0xFFFFFFFF : 0x00000000;
+            }
+            case 3 -> {
+                Boolean locked = stack.get(BPDataComponents.LOCKED.get());
+                yield (locked != null && locked) ? 0xFFFFFFFF : 0x00000000;
+            }
             default -> -1;
         }, BPItems.BACKPACK.value());
     }

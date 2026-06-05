@@ -21,8 +21,14 @@ import net.neoforged.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class BackpackBlockRenderer implements BlockEntityRenderer<BackpackBlockEntity> {
 
-    private static final ResourceLocation OVERLAY_TEXTURE = ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID,
-            "textures/entity/backpack_overlay.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID,
+            "textures/entity/backpack.png");
+    private static final ResourceLocation DEPTHS_TEXTURE = ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID,
+            "textures/entity/backpack_depths.png");
+    private static final ResourceLocation REINFORCED_TEXTURE = ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID,
+            "textures/entity/backpack_reinforced.png");
+    private static final ResourceLocation LOCKED_TEXTURE = ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID,
+            "textures/entity/backpack_locked.png");
 
     private final ModelPart base;
     private final ModelPart lid;
@@ -85,7 +91,7 @@ public class BackpackBlockRenderer implements BlockEntityRenderer<BackpackBlockE
 
         // base.render() renderiza el cuerpo + tapa (lid es hijo de base)
         if (blockEntity.getBaseColor() != 0) {
-            VertexConsumer vcBase = buffer.getBuffer(RenderType.entityCutoutNoCull(OVERLAY_TEXTURE));
+            VertexConsumer vcBase = buffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
             this.base.render(poseStack, vcBase, packedLight, packedOverlay, FastColor.ARGB32.opaque(blockEntity.getBaseColor()));
         }
 
@@ -93,9 +99,22 @@ public class BackpackBlockRenderer implements BlockEntityRenderer<BackpackBlockE
         if (blockEntity.getLidColor() != 0) {
             poseStack.pushPose();
             this.base.translateAndRotate(poseStack);
-            VertexConsumer vcLid = buffer.getBuffer(RenderType.entityCutoutNoCull(OVERLAY_TEXTURE));
+            VertexConsumer vcLid = buffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
             this.lid.render(poseStack, vcLid, packedLight, packedOverlay, FastColor.ARGB32.opaque(blockEntity.getLidColor()));
             poseStack.popPose();
+        }
+
+        VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityCutoutNoCull(DEPTHS_TEXTURE));
+        this.base.render(poseStack, vertexConsumer, packedLight, packedOverlay);
+
+        if (blockEntity.isReinforced()) {
+            VertexConsumer vc = buffer.getBuffer(RenderType.entityCutoutNoCull(REINFORCED_TEXTURE));
+            this.base.render(poseStack, vc, packedLight, packedOverlay);
+        }
+
+        if (blockEntity.isLocked()) {
+            VertexConsumer vc = buffer.getBuffer(RenderType.entityCutoutNoCull(LOCKED_TEXTURE));
+            this.base.render(poseStack, vc, packedLight, packedOverlay);
         }
 
         poseStack.popPose();

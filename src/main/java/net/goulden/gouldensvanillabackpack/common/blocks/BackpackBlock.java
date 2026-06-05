@@ -24,6 +24,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
@@ -96,13 +97,11 @@ public class BackpackBlock extends BaseEntityBlock implements EntityBlock, Simpl
     }
 
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        Direction direction = state.getValue(FACING);
         if (state.getValue(FLOATING)) {
-            return direction.getAxis() == Direction.Axis.X ? FLOATING_SHAPE_Z : FLOATING_SHAPE_X;
+            return state.getValue(FACING).getAxis() == Direction.Axis.X ? FLOATING_SHAPE_Z : FLOATING_SHAPE_X;
         } else {
-            return direction.getAxis() == Direction.Axis.X ? SHAPE_Z : SHAPE_X;
+            return state.getValue(FACING).getAxis() == Direction.Axis.X ? SHAPE_Z : SHAPE_X;
         }
-
     }
 
     @Override
@@ -124,10 +123,18 @@ public class BackpackBlock extends BaseEntityBlock implements EntityBlock, Simpl
         FACING = HorizontalDirectionalBlock.FACING;
         FLOATING = BooleanProperty.create("floating");
         WATERLOGGED = BlockStateProperties.WATERLOGGED;
-        SHAPE_X = Block.box(3.0, 0.0, 4.0, 13.0, 12.5, 12.0);
-        SHAPE_Z = Block.box(4.0, 0.0, 3.0, 12.0, 12.5, 13.0);
-        FLOATING_SHAPE_X = Block.box(3.0, -2.5, 4.0, 13.0, 8.5, 12.0);
-        FLOATING_SHAPE_Z = Block.box(4.0, -2.5, 3.0, 12.0, 8.5, 13.0);
+        SHAPE_X = Shapes.or(
+                Block.box(4.0, 0.0, 5.0, 12.0, 7.5, 11.0),
+                Block.box(3.5, 7.5, 4.5, 12.5, 11.5, 11.5));
+        SHAPE_Z = Shapes.or(
+                Block.box(5.0, 0.0, 4.0, 11.0, 7.5, 12.0),
+                Block.box(4.5, 7.5, 3.5, 11.5, 11.5, 12.5));
+        FLOATING_SHAPE_X = Shapes.or(
+                Block.box(4.0, -2.5, 5.0, 12.0, 5.0, 11.0),
+                Block.box(3.5, 5.0, 4.5, 12.5, 9, 11.5));
+        FLOATING_SHAPE_Z = Shapes.or(
+                Block.box(5.0, -2.5, 4.0, 11.0, 5.0, 12.0),
+                Block.box(4.5, 5.0, 3.5, 11.5, 9, 12.5));
     }
 
     @Override

@@ -45,7 +45,7 @@ public class BackpackUpgradeEvents {
                     int color = dyeItem.getDyeColor().getTextureDiffuseColor();
                     double hitY = event.getHitVec().getLocation().y - blockPos.getY();
                     boolean isFloating = level.getBlockState(blockPos).getValue(BackpackBlock.FLOATING);
-                    if (hitY > (isFloating ? 0.35 : 0.5)) {
+                    if (hitY > (isFloating ? 0.3124 : 0.4687)) {
                         backpackBlockEntity.setLidColor(color);
                     } else {
                         backpackBlockEntity.setBaseColor(color);
