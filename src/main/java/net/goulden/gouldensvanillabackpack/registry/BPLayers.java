@@ -2,7 +2,6 @@ package net.goulden.gouldensvanillabackpack.registry;
 
 import net.goulden.gouldensvanillabackpack.GouldensVanillaBackpack;
 import net.goulden.gouldensvanillabackpack.client.models.BackpackModel;
-import net.goulden.gouldensvanillabackpack.client.particles.BackpackBreakParticle;
 import net.goulden.gouldensvanillabackpack.client.rendering.BackpackBlockRenderer;
 import net.goulden.gouldensvanillabackpack.client.rendering.BackpackLayer;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -21,7 +20,6 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 
 @EventBusSubscriber(modid = GouldensVanillaBackpack.MODID, value = Dist.CLIENT)
 public class BPLayers {
@@ -36,6 +34,22 @@ public class BPLayers {
                     BPItems.BACKPACK.asItem(),
                     ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID, "dyed"),
                     (stack, level, player, seed) -> isDyed(stack)
+            );
+            ItemProperties.register(
+                    BPItems.BACKPACK.asItem(),
+                    ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID, "reinforced"),
+                    (stack, level, player, seed) -> {
+                        Boolean r = stack.get(BPDataComponents.REINFORCED.get());
+                        return (r != null && r) ? 1.0f : 0.0f;
+                    }
+            );
+            ItemProperties.register(
+                    BPItems.BACKPACK.asItem(),
+                    ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID, "locked"),
+                    (stack, level, player, seed) -> {
+                        Boolean l = stack.get(BPDataComponents.LOCKED.get());
+                        return (l != null && l) ? 1.0f : 0.0f;
+                    }
             );
         });
     }
@@ -53,7 +67,6 @@ public class BPLayers {
         event.registerLayerDefinition(BACKPACK, BackpackModel::createBodyLayer);
         event.registerLayerDefinition(BACKPACK_BLOCK, BackpackModel::createBlockLayer);
     }
-
 
     @SubscribeEvent
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
@@ -84,10 +97,5 @@ public class BPLayers {
                 armorStandRenderer.addLayer(new BackpackLayer<>(armorStandRenderer, event.getEntityModels()));
             }
         }
-    }
-
-    @SubscribeEvent
-    public static void onRegisterParticles(RegisterParticleProvidersEvent event) {
-        event.registerSpriteSet(BPParticles.BACKPACK_BREAK.get(), BackpackBreakParticle.Provider::new);
     }
 }

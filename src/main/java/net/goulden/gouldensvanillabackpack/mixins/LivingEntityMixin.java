@@ -22,8 +22,13 @@ public abstract class LivingEntityMixin extends Entity implements BackpackWearer
 
     @Inject(method = "baseTick", at = @At("HEAD"))
     public void baseTick(CallbackInfo ci) {
-        if (getData(IS_OPEN) && getData(OPEN_TICKS) < 10) { setData(OPEN_TICKS, getData(OPEN_TICKS) + 1); }
-        if (!getData(IS_OPEN) && getData(OPEN_TICKS) > 0) { setData(OPEN_TICKS, getData(OPEN_TICKS) - 1); }
+        float current = getData(OPEN_TICKS) / 10f;
+        float target = getData(IS_OPEN) ? 1.0f : 0.0f;
+
+        float speed = 0.15f;
+        float next = current + (target - current) * speed;
+
+        setData(OPEN_TICKS, (int)(next * 10));
     }
 
     public void onBackpackOpen() {

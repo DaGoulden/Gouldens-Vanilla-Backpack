@@ -11,7 +11,8 @@
         "include": [
           "gouldensvanillabackpack:base_color",
           "gouldensvanillabackpack:lid_color",
-          "gouldensvanillabackpack:reinforced"
+          "gouldensvanillabackpack:reinforced",
+          "gouldensvanillabackpack:locked"
         ]
       }]
     }],

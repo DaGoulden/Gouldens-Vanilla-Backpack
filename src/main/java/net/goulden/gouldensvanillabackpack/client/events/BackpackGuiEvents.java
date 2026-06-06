@@ -32,6 +32,15 @@ public class BackpackGuiEvents {
     private static final ResourceLocation LOCKED_TEXTURE = ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID,
             "textures/gui/backpack_slot_locked.png");
 
+    /*private static final ResourceLocation BASE_TEXTURE = ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID,
+            "textures/item/backpack_base.png");
+    private static final ResourceLocation LID_TEXTURE = ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID,
+            "textures/item/backpack_lid.png");
+    private static final ResourceLocation REINFORCED_TEXTURE = ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID,
+            "textures/item/backpack_reinforced.png");
+    private static final ResourceLocation LOCKED_TEXTURE = ResourceLocation.fromNamespaceAndPath(GouldensVanillaBackpack.MODID,
+            "textures/item/backpack_locked.png");*/
+
     @SubscribeEvent
     public static void onRenderGui(ContainerScreenEvent.Render.Background event) {
         if (!(event.getContainerScreen() instanceof InventoryScreen screen)) return;

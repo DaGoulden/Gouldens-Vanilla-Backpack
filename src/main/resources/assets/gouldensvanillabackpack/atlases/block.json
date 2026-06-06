@@ -1,0 +1,8 @@
+{
+  "sources": [
+    {
+      "type": "single",
+      "resource": "gouldensvanillabackpack:block/backpack_particle"
+    }
+  ]
+}

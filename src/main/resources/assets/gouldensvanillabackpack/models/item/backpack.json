@@ -2,8 +2,20 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "gouldensvanillabackpack:item/backpack_base",
-    "layer1": "gouldensvanillabackpack:item/backpack_lid",
-    "layer2": "gouldensvanillabackpack:item/backpack_reinforced",
-    "layer3": "gouldensvanillabackpack:item/backpack_locked"
-  }
+    "layer1": "gouldensvanillabackpack:item/backpack_lid"
+  },
+  "overrides": [
+    {
+      "predicate": { "gouldensvanillabackpack:reinforced": 1 },
+      "model": "gouldensvanillabackpack:item/backpack_reinforced"
+    },
+    {
+      "predicate": { "gouldensvanillabackpack:locked": 1 },
+      "model": "gouldensvanillabackpack:item/backpack_locked"
+    },
+    {
+      "predicate": { "gouldensvanillabackpack:reinforced": 1, "gouldensvanillabackpack:locked": 1 },
+      "model": "gouldensvanillabackpack:item/backpack_reinforced_locked"
+    }
+  ]
 }

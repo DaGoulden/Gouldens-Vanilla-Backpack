@@ -57,7 +57,6 @@ public class BackpackLayer<T extends LivingEntity, M extends HumanoidModel<T>> e
 
         poseStack.pushPose();
 
-        // LID ANIMATION
         float lidRot = 0;
         boolean isOpen = livingEntity.getData(BPAttachments.IS_OPEN);
         int openTicks = livingEntity.getData(BPAttachments.OPEN_TICKS);
@@ -71,19 +70,16 @@ public class BackpackLayer<T extends LivingEntity, M extends HumanoidModel<T>> e
             lidRot = (float) -Math.pow(2, t - 10) * Mth.sin((t - 10.75F) * 0.5F);
         }
 
-        // BODY-ANCHORED
         this.backpackModel.copyFrom(parentBody);
         ModelPart base = this.backpackModel.getChild("base");
         ModelPart lid = base.getChild("lid");
         lid.xRot = lidRot;
 
-        // BASE COLOR RENDER
         if (baseColor != null) {
             VertexConsumer vcBase = ItemRenderer.getArmorFoilBuffer(buffer, RenderType.armorCutoutNoCull(TEXTURE), itemStack.hasFoil());
             this.backpackModel.render(poseStack, vcBase, packedLight, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.opaque(baseColor));
         }
 
-        // LID COLOR RENDER
         if (lidColor != null) {
             poseStack.pushPose();
             this.backpackModel.translateAndRotate(poseStack);

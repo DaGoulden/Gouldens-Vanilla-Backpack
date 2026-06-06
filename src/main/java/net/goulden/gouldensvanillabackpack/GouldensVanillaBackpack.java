@@ -25,7 +25,6 @@ public class GouldensVanillaBackpack {
         BPBlocks.BLOCKS.register(modEventBus);
         BPDataComponents.COMPONENTS.register(modEventBus);
         BPItems.ITEMS.register(modEventBus);
-        BPParticles.PARTICLES.register(modEventBus);
         BPRecipes.SERIALIZERS.register(modEventBus);
         BPSounds.SOUND_EVENTS.register(modEventBus);
     }
@@ -55,14 +54,6 @@ public class GouldensVanillaBackpack {
             case 1 -> {
                 Integer color = stack.get(BPDataComponents.LID_COLOR.get());
                 yield color != null ? FastColor.ARGB32.opaque(color) : -1;
-            }
-            case 2 -> {
-                Boolean reinforced = stack.get(BPDataComponents.REINFORCED.get());
-                yield (reinforced != null && reinforced) ? 0xFFFFFFFF : 0x00000000;
-            }
-            case 3 -> {
-                Boolean locked = stack.get(BPDataComponents.LOCKED.get());
-                yield (locked != null && locked) ? 0xFFFFFFFF : 0x00000000;
             }
             default -> -1;
         }, BPItems.BACKPACK.value());

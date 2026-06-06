@@ -1,11 +1,10 @@
 package net.goulden.gouldensvanillabackpack.common.blocks;
 
 import com.mojang.serialization.MapCodec;
-import net.goulden.gouldensvanillabackpack.common.particles.BackpackBreakParticleOptions;
+import net.goulden.gouldensvanillabackpack.client.BackpackBlockClientExtensions;
 import net.goulden.gouldensvanillabackpack.registry.BPBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -26,8 +25,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
 
 import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 public class BackpackBlock extends BaseEntityBlock implements EntityBlock, SimpleWaterloggedBlock {
     protected static final VoxelShape SHAPE_X;
@@ -138,25 +139,7 @@ public class BackpackBlock extends BaseEntityBlock implements EntityBlock, Simpl
     }
 
     @Override
-    public void spawnDestroyParticles(Level level, Player player, BlockPos pos, BlockState state) {
-        level.playSound(null, pos, state.getSoundType().getBreakSound(), SoundSource.BLOCKS, 1.0F, 1.0F);
-        if (level.getBlockEntity(pos) instanceof BackpackBlockEntity be) {
-            int baseColor = be.getBaseColor();
-            int lidColor = be.getLidColor();
-            for (int i = 0; i < 10; i++) {
-                double x = pos.getX() + level.random.nextDouble();
-                double y = pos.getY() + level.random.nextDouble();
-                double z = pos.getZ() + level.random.nextDouble();
-                double vx = (level.random.nextDouble() - 0.5) * 0.1;
-                double vy = level.random.nextDouble() * 0.1;
-                double vz = (level.random.nextDouble() - 0.5) * 0.1;
-                if (baseColor != 0)
-                    level.addParticle(new BackpackBreakParticleOptions(baseColor), x, y, z, vx, vy, vz);
-                if (lidColor != 0)
-                    level.addParticle(new BackpackBreakParticleOptions(lidColor), x, y, z, vx, vy, vz);
-            }
-        } else {
-            super.spawnDestroyParticles(level, player, pos, state);
-        }
+    public void initializeClient(Consumer<IClientBlockExtensions> consumer) {
+        consumer.accept(new BackpackBlockClientExtensions());
     }
 }
