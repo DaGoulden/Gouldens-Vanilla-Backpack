@@ -1,4 +1,5 @@
 {
   "block.gouldensvanillabackpack.backpack": "Backpack",
-  "container.backpack": "Backpack"
+  "container.backpack": "Backpack",
+  "enchantment.gouldensvanillabackpack.holding": "Holding"
 }

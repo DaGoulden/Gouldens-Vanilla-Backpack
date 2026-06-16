@@ -6,6 +6,7 @@ import net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlockEntity;
 import net.goulden.gouldensvanillabackpack.networking.BackpackEquipPayload;
 import net.goulden.gouldensvanillabackpack.registry.BPBlocks;
 import net.goulden.gouldensvanillabackpack.registry.BPAttachments;
+import net.goulden.gouldensvanillabackpack.registry.BPEnchantments;
 import net.goulden.gouldensvanillabackpack.registry.BPItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -92,6 +93,7 @@ public class BackpackOnDeathDropEvents {
                 .setValue(BackpackBlock.FLOATING, inFluid);
 
         BackpackBlockEntity blockEntity = new BackpackBlockEntity(placePos, state);
+        blockEntity.setSlotCount(BPEnchantments.getSlotCount(stack, level.registryAccess()));
         blockEntity.applyComponentsFromItemStack(stack);
         level.setBlockAndUpdate(placePos, state);
         level.setBlockEntity(blockEntity);

@@ -6,6 +6,7 @@ import net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlockEntity;
 import net.goulden.gouldensvanillabackpack.networking.BackpackEquipPayload;
 import net.goulden.gouldensvanillabackpack.registry.BPBlocks;
 import net.goulden.gouldensvanillabackpack.registry.BPAttachments;
+import net.goulden.gouldensvanillabackpack.registry.BPEnchantments;
 import net.goulden.gouldensvanillabackpack.registry.BPSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -82,6 +83,8 @@ public class BackpackEvents {
                                 .setValue(FACING, player.getDirection())
                                 .setValue(WATERLOGGED, level.getFluidState(placePos).getType() == Fluids.WATER);
                         blockEntity = new BackpackBlockEntity(placePos, state);
+                        int slotCount = BPEnchantments.getSlotCount(equippedBackpackSlot, level.registryAccess());
+                        ((BackpackBlockEntity) blockEntity).setSlotCount(slotCount);
                         blockEntity.applyComponentsFromItemStack(equippedBackpackSlot);
                         player.setData(BACKPACK_SLOT, ItemStack.EMPTY);
                         PacketDistributor.sendToPlayersTrackingEntityAndSelf(player, new BackpackEquipPayload(player.getId(), ItemStack.EMPTY));

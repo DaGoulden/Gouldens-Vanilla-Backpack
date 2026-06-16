@@ -18,4 +18,14 @@ public class BackpackItem extends BlockItem {
         }
         return false;
     }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return true;
+    }
+
+    @Override
+    public int getEnchantmentValue() {
+        return 1;
+    }
 }

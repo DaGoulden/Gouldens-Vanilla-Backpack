@@ -1,6 +1,7 @@
 package net.goulden.gouldensvanillabackpack.mixins;
 
 import net.goulden.gouldensvanillabackpack.registry.BPAttachments;
+import net.goulden.gouldensvanillabackpack.registry.BPEnchantments;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -21,6 +22,7 @@ public class ServerPlayerMixin {
     private void onSave(CompoundTag tag, CallbackInfo ci) {
         ServerPlayer player = (ServerPlayer)(Object)this;
         ItemStack backpack = player.getData(BPAttachments.BACKPACK_SLOT);
+        int slots = BPEnchantments.getSlotCount(backpack, player.registryAccess());
         if (backpack.isEmpty()) return;
 
         ItemStack toSave = backpack.copy();
@@ -30,7 +32,7 @@ public class ServerPlayerMixin {
         ItemContainerContents contents = backpack.get(DataComponents.CONTAINER);
         if (contents == null) return;
 
-        NonNullList<ItemStack> list = NonNullList.withSize(27, ItemStack.EMPTY);
+        NonNullList<ItemStack> list = NonNullList.withSize(slots, ItemStack.EMPTY);
         contents.copyInto(list);
         ListTag listTag = new ListTag();
         for (int i = 0; i < list.size(); i++) {
@@ -50,17 +52,17 @@ public class ServerPlayerMixin {
         ServerPlayer player = (ServerPlayer)(Object)this;
         if (!tag.contains("BackpackItem")) return;
 
-        ItemStack backpack = ItemStack.parse(player.registryAccess(), tag.getCompound("BackpackItem"))
-                .orElse(ItemStack.EMPTY);
+        ItemStack backpack = ItemStack.parse(player.registryAccess(), tag.getCompound("BackpackItem")).orElse(ItemStack.EMPTY);
+        int slots = BPEnchantments.getSlotCount(backpack, player.registryAccess());
         if (backpack.isEmpty()) return;
 
         if (tag.contains("BackpackContents")) {
-            NonNullList<ItemStack> list = NonNullList.withSize(27, ItemStack.EMPTY);
+            NonNullList<ItemStack> list = NonNullList.withSize(slots, ItemStack.EMPTY);
             ListTag listTag = tag.getList("BackpackContents", 10);
             for (int i = 0; i < listTag.size(); i++) {
                 CompoundTag itemTag = listTag.getCompound(i);
                 int slot = itemTag.getByte("Slot") & 255;
-                if (slot < 27 && itemTag.contains("Item")) {
+                if (slot < slots && itemTag.contains("Item")) {
                     ItemStack.parse(player.registryAccess(), itemTag.getCompound("Item"))
                             .ifPresent(s -> list.set(slot, s));
                 }

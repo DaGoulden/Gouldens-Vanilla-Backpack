@@ -89,13 +89,11 @@ public class BackpackBlockRenderer implements BlockEntityRenderer<BackpackBlockE
         this.base.zRot = baseRotZ;
         this.base.y = basePosY;
 
-        // base.render() renderiza el cuerpo + tapa (lid es hijo de base)
         if (blockEntity.getBaseColor() != 0) {
             VertexConsumer vcBase = buffer.getBuffer(RenderType.entityCutoutNoCull(TEXTURE));
             this.base.render(poseStack, vcBase, packedLight, packedOverlay, FastColor.ARGB32.opaque(blockEntity.getBaseColor()));
         }
 
-        // Para renderizar solo la tapa con lidColor hay que entrar al espacio de base primero
         if (blockEntity.getLidColor() != 0) {
             poseStack.pushPose();
             this.base.translateAndRotate(poseStack);
@@ -115,6 +113,11 @@ public class BackpackBlockRenderer implements BlockEntityRenderer<BackpackBlockE
         if (blockEntity.isLocked()) {
             VertexConsumer vc = buffer.getBuffer(RenderType.entityCutoutNoCull(LOCKED_TEXTURE));
             this.base.render(poseStack, vc, packedLight, packedOverlay);
+        }
+
+        if (blockEntity.getContainerSize() > BackpackBlockEntity.DEFAULT_SLOTS) {
+            VertexConsumer glint = buffer.getBuffer(RenderType.entityGlint());
+            this.base.render(poseStack, glint, packedLight, packedOverlay);
         }
 
         poseStack.popPose();

@@ -2,10 +2,7 @@ package net.goulden.gouldensvanillabackpack.common.events;
 
 import net.goulden.gouldensvanillabackpack.GouldensVanillaBackpack;
 import net.goulden.gouldensvanillabackpack.networking.BackpackOpenPayload;
-import net.goulden.gouldensvanillabackpack.registry.BPAttachments;
-import net.goulden.gouldensvanillabackpack.registry.BPDataComponents;
-import net.goulden.gouldensvanillabackpack.registry.BPItems;
-import net.goulden.gouldensvanillabackpack.registry.BPSounds;
+import net.goulden.gouldensvanillabackpack.registry.*;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -55,25 +52,23 @@ public class EntityInteractionEvents {
                 target.level().playSound(null, target.blockPosition(), BPSounds.BACKPACK_OPEN.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
             }
 
-            SimpleContainer container = new SimpleContainer(27);
+            int slots = BPEnchantments.getSlotCount(item, player.level().registryAccess());
+            SimpleContainer container = new SimpleContainer(slots);
             if (item.has(DataComponents.CONTAINER)) {
-                NonNullList<ItemStack> list = NonNullList.withSize(27, ItemStack.EMPTY);
+                NonNullList<ItemStack> list = NonNullList.withSize(slots, ItemStack.EMPTY);
                 item.get(DataComponents.CONTAINER).copyInto(list);
-                for (int i = 0; i < 27; i++) container.setItem(i, list.get(i));
+                for (int i = 0; i < slots; i++) container.setItem(i, list.get(i));
             }
 
-            SimpleContainer syncedContainer = new SimpleContainer(27) {
+            SimpleContainer syncedContainer = new SimpleContainer(slots) {
                 {
-                    for (int i = 0; i < container.getContainerSize(); i++) {
-                        setItem(i, container.getItem(i));
-                    }
+                    for (int i = 0; i < container.getContainerSize(); i++) setItem(i, container.getItem(i));
                 }
-
                 @Override
                 public void setChanged() {
                     super.setChanged();
-                    NonNullList<ItemStack> list = NonNullList.withSize(27, ItemStack.EMPTY);
-                    for (int i = 0; i < 27; i++) list.set(i, getItem(i));
+                    NonNullList<ItemStack> list = NonNullList.withSize(slots, ItemStack.EMPTY);
+                    for (int i = 0; i < slots; i++) list.set(i, getItem(i));
                     item.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(list));
                 }
             };

@@ -9,6 +9,7 @@
         "function": "minecraft:copy_components",
         "source": "block_entity",
         "include": [
+          "minecraft:enchantments",
           "gouldensvanillabackpack:base_color",
           "gouldensvanillabackpack:lid_color",
           "gouldensvanillabackpack:reinforced",

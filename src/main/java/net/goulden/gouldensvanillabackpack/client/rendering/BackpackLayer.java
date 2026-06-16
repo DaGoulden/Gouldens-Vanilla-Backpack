@@ -76,7 +76,7 @@ public class BackpackLayer<T extends LivingEntity, M extends HumanoidModel<T>> e
         lid.xRot = lidRot;
 
         if (baseColor != null) {
-            VertexConsumer vcBase = ItemRenderer.getArmorFoilBuffer(buffer, RenderType.armorCutoutNoCull(TEXTURE), itemStack.hasFoil());
+            VertexConsumer vcBase = buffer.getBuffer(RenderType.armorCutoutNoCull(TEXTURE));
             this.backpackModel.render(poseStack, vcBase, packedLight, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.opaque(baseColor));
         }
 
@@ -84,27 +84,29 @@ public class BackpackLayer<T extends LivingEntity, M extends HumanoidModel<T>> e
             poseStack.pushPose();
             this.backpackModel.translateAndRotate(poseStack);
             base.translateAndRotate(poseStack);
-            VertexConsumer vcLid = ItemRenderer.getArmorFoilBuffer(buffer, RenderType.armorCutoutNoCull(TEXTURE), itemStack.hasFoil());
+            VertexConsumer vcLid = buffer.getBuffer(RenderType.armorCutoutNoCull(TEXTURE));
             lid.render(poseStack, vcLid, packedLight, OverlayTexture.NO_OVERLAY, FastColor.ARGB32.opaque(lidColor));
             poseStack.popPose();
         }
 
-        VertexConsumer vertexConsumer = ItemRenderer.getArmorFoilBuffer(buffer,
-                RenderType.armorCutoutNoCull(DEPTHS_TEXTURE), itemStack.hasFoil());
+        VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.armorCutoutNoCull(DEPTHS_TEXTURE));
         this.backpackModel.render(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY);
 
         Boolean reinforced = itemStack.get(BPDataComponents.REINFORCED.get());
         if (reinforced != null && reinforced) {
-            VertexConsumer vcR = ItemRenderer.getArmorFoilBuffer(buffer,
-                    RenderType.armorCutoutNoCull(REINFORCED_TEXTURE), itemStack.hasFoil());
+            VertexConsumer vcR = buffer.getBuffer(RenderType.armorCutoutNoCull(REINFORCED_TEXTURE));
             this.backpackModel.render(poseStack, vcR, packedLight, OverlayTexture.NO_OVERLAY);
         }
 
         Boolean locked = itemStack.get(BPDataComponents.LOCKED.get());
         if (locked != null && locked) {
-            VertexConsumer vcR = ItemRenderer.getArmorFoilBuffer(buffer,
-                    RenderType.armorCutoutNoCull(LOCKED_TEXTURE), itemStack.hasFoil());
+            VertexConsumer vcR = buffer.getBuffer(RenderType.armorCutoutNoCull(LOCKED_TEXTURE));
             this.backpackModel.render(poseStack, vcR, packedLight, OverlayTexture.NO_OVERLAY);
+        }
+
+        if (itemStack.hasFoil()) {
+            VertexConsumer glint = buffer.getBuffer(RenderType.armorEntityGlint());
+            this.backpackModel.render(poseStack, glint, packedLight, OverlayTexture.NO_OVERLAY);
         }
 
         poseStack.popPose();
