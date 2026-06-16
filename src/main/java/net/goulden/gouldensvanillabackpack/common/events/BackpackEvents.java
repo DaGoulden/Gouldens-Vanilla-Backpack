@@ -13,6 +13,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.*;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -69,7 +70,8 @@ public class BackpackEvents {
             }
 
             // PLACE BACKPACK
-            if (event.getHitVec().getDirection() == Direction.UP || level.getBlockState(blockPos).canBeReplaced()) {
+            if (event.getHitVec().getDirection() == Direction.UP
+                    || (level.getBlockState(blockPos).canBeReplaced() && !level.getBlockState(blockPos).is(BlockTags.CLIMBABLE))) {
 
                 while (level.getBlockState(blockPos).canBeReplaced()) {
                     blockPos = blockPos.below();
