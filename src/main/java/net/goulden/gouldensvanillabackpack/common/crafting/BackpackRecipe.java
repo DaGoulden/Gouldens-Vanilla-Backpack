@@ -1,6 +1,5 @@
 package net.goulden.gouldensvanillabackpack.common.crafting;
 
-import net.goulden.gouldensvanillabackpack.registry.BPAttachments;
 import net.goulden.gouldensvanillabackpack.registry.BPDataComponents;
 import net.goulden.gouldensvanillabackpack.registry.BPItems;
 import net.minecraft.core.HolderLookup;

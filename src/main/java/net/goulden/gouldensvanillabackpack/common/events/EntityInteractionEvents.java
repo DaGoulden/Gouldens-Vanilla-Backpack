@@ -13,7 +13,8 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ShulkerBoxMenu;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.phys.Vec3;
@@ -74,7 +75,16 @@ public class EntityInteractionEvents {
             };
 
             player.openMenu(new SimpleMenuProvider(
-                    (id, inv, p) -> new ShulkerBoxMenu(id, inv, syncedContainer),
+                    (id, inv, p) -> {
+                        int rows = slots / 9;
+                        MenuType<?> type = switch (rows) {
+                            case 4 -> MenuType.GENERIC_9x4;
+                            case 5 -> MenuType.GENERIC_9x5;
+                            case 6 -> MenuType.GENERIC_9x6;
+                            default -> MenuType.GENERIC_9x3;
+                        };
+                        return new ChestMenu(type, id, inv, syncedContainer, rows);
+                    },
                     Component.translatable("container.backpack")
             ));
         }
@@ -103,7 +113,7 @@ public class EntityInteractionEvents {
         }
 
         Player target = player.level().getPlayerByUUID(openingBackpack.get(player.getUUID()));
-        if (!(player.containerMenu instanceof ShulkerBoxMenu)) {
+        if (!(player.containerMenu instanceof ChestMenu)) {
             openingBackpack.remove(player.getUUID());
             player.level().playSound(null, target.blockPosition(), BPSounds.BACKPACK_CLOSE.value(), SoundSource.PLAYERS, 1.0F, 1.0F);
             return;
