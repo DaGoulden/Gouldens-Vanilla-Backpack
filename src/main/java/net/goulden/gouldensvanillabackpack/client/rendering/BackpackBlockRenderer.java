@@ -7,6 +7,7 @@ import net.goulden.gouldensvanillabackpack.GouldensVanillaBackpack;
 import net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlock;
 import net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlockEntity;
 import net.goulden.gouldensvanillabackpack.registry.BPLayers;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -106,12 +107,12 @@ public class BackpackBlockRenderer implements BlockEntityRenderer<BackpackBlockE
         this.base.render(poseStack, vertexConsumer, packedLight, packedOverlay);
 
         if (blockEntity.isReinforced()) {
-            VertexConsumer vc = buffer.getBuffer(RenderType.entityCutoutNoCull(REINFORCED_TEXTURE));
+            VertexConsumer vc = buffer.getBuffer(RenderType.entityTranslucent(REINFORCED_TEXTURE));
             this.base.render(poseStack, vc, packedLight, packedOverlay);
         }
 
         if (blockEntity.isLocked()) {
-            VertexConsumer vc = buffer.getBuffer(RenderType.entityCutoutNoCull(LOCKED_TEXTURE));
+            VertexConsumer vc = buffer.getBuffer(RenderType.entityTranslucent(LOCKED_TEXTURE));
             this.base.render(poseStack, vc, packedLight, packedOverlay);
         }
 
