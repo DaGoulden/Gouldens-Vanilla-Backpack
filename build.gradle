@@ -132,7 +132,6 @@ configurations {
 }
 
 dependencies {
-    compileOnly "maven.modrinth:iris:oXIoDcGE"
     localRuntime "maven.modrinth:sodium:Pb3OXVqC"
     localRuntime "maven.modrinth:iris:oXIoDcGE"
 }
