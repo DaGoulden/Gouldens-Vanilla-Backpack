@@ -7,7 +7,6 @@ import net.goulden.gouldensvanillabackpack.GouldensVanillaBackpack;
 import net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlock;
 import net.goulden.gouldensvanillabackpack.common.blocks.BackpackBlockEntity;
 import net.goulden.gouldensvanillabackpack.registry.BPLayers;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
